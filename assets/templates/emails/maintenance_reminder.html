@@ -1,0 +1,27 @@
+<!-- templates/emails/maintenance_reminder.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Maintenance Reminder</title>
+</head>
+<body>
+    <h2>Maintenance Due for {{ asset.name }}</h2>
+    <p>
+        This is a reminder that maintenance is scheduled for 
+        <strong>{{ asset.name }}</strong> ({{ asset.asset_id }}) 
+        on <strong>{{ maintenance_date }}</strong>.
+    </p>
+    <p>
+        Current Location: {{ asset.location }}<br>
+        Custodian: {{ asset.custodian }}
+    </p>
+    <p>
+        Please ensure the asset is available for maintenance.
+    </p>
+    <p>
+        <a href="{{ protocol }}://{{ domain }}{% url 'asset-detail' asset.id %}">
+            View Asset Details
+        </a>
+    </p>
+</body>
+</html>
