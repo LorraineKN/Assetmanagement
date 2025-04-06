@@ -1,0 +1,353 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Assets - Asset Management{% endblock %}
+
+{% block content %}
+<div class="container">
+    <!-- Assets Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="h3"><i class="fas fa-laptop me-2"></i>Assets</h1>
+        <div>
+            <a href="{% url 'asset_export' %}" class="btn btn-outline-primary me-2">
+                <i class="fas fa-file-export me-1"></i>Export
+            </a>
+            <a href="{% url 'asset_create' %}" class="btn btn-primary">
+                <i class="fas fa-plus me-1"></i>Add New Asset
+            </a>
+        </div>
+    </div>
+
+    <!-- Search and Filter -->
+    <div class="card mb-4">
+        <div class="card-body">
+            <form method="get" class="row g-3">
+                <div class="col-md-3">
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="fas fa-search"></i></span>
+                        <input type="text" name="search" class="form-control" placeholder="Search assets..." value="{{ request.GET.search }}">
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <select name="status" class="form-select">
+                        <option value="">All Statuses</option>
+                        {% for status in status_choices %}
+                        <option value="{{ status.0 }}" {% if request.GET.status == status.0 %}selected{% endif %}>{{ status.1 }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <select name="category" class="form-select">
+                        <option value="">All Categories</option>
+                        {% for category in categories %}
+                        <option value="{{ category.id }}" {% if request.GET.category|add:0 == category.id %}selected{% endif %}>{{ category.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <select name="department" class="form-select">
+                        <option value="">All Departments</option>
+                        {% for dept in departments %}
+                        <option value="{{ dept.id }}" {% if request.GET.department|add:0 == dept.id %}selected{% endif %}>{{ dept.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <div class="d-flex">
+                        <button type="submit" class="btn btn-primary me-2">
+                            <i class="fas fa-filter me-1"></i>Apply
+                        </button>
+                        <a href="{% url 'asset_list' %}" class="btn btn-outline-secondary">
+                            <i class="fas fa-undo me-1"></i>Reset
+                        </a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Assets Grid View -->
+    <div class="card">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <div>
+                <i class="fas fa-th-list me-2"></i>Assets ({{ page_obj.paginator.count }})
+            </div>
+            <div class="btn-group btn-group-sm" role="group">
+                <button type="button" class="btn btn-outline-secondary active" id="gridViewBtn">
+                    <i class="fas fa-th-large"></i>
+                </button>
+                <button type="button" class="btn btn-outline-secondary" id="listViewBtn">
+                    <i class="fas fa-list"></i>
+                </button>
+            </div>
+        </div>
+        
+        <!-- Grid View -->
+        <div class="card-body" id="gridView">
+            {% if assets %}
+            <div class="row">
+                {% for asset in assets %}
+                <div class="col-xl-3 col-lg-4 col-md-6 mb-4">
+                    <div class="card h-100">
+                        {% if asset.image %}
+                        <img src="{{ asset.image.url }}" class="card-img-top" alt="{{ asset.name }}" style="height: 150px; object-fit: cover;">
+                        {% else %}
+                        <div class="card-img-top d-flex justify-content-center align-items-center bg-light" style="height: 150px;">
+                            <i class="fas fa-laptop fa-3x text-secondary"></i>
+                        </div>
+                        {% endif %}
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-start mb-2">
+                                <h5 class="card-title mb-0">{{ asset.name }}</h5>
+                                <span class="badge 
+                                    {% if asset.status == 'active' %}badge-status-active
+                                    {% elif asset.status == 'inactive' %}badge-status-inactive
+                                    {% elif asset.status == 'maintenance' %}badge-status-maintenance
+                                    {% else %}badge-status-{{asset.status}}{% endif %}">
+                                    {{ asset.get_status_display }}
+                                </span>
+                            </div>
+                            <p class="card-text text-muted mb-2">{{ asset.asset_id }}</p>
+                            <div class="mb-2 small">
+                                <i class="fas fa-tag me-1 text-secondary"></i>
+                                {{ asset.category|default:"Uncategorized" }}
+                            </div>
+                            <div class="mb-2 small">
+                                <i class="fas fa-map-marker-alt me-1 text-secondary"></i>
+                                {{ asset.location|default:"No Location" }}
+                            </div>
+                            <div class="mb-2 small">
+                                <i class="fas fa-user me-1 text-secondary"></i>
+                                {{ asset.custodian.user.get_full_name|default:"Unassigned" }}
+                            </div>
+                            {% if asset.purchase_price %}
+                            <div class="mb-2 small">
+                                <i class="fas fa-dollar-sign me-1 text-secondary"></i>
+                                ${{ asset.purchase_price|floatformat:2 }}
+                            </div>
+                            {% endif %}
+                        </div>
+                        <div class="card-footer bg-white border-top-0">
+                            <div class="d-flex justify-content-between">
+                                <a href="{% url 'asset_detail' asset.id %}" class="btn btn-sm btn-outline-primary">
+                                    <i class="fas fa-eye me-1"></i>View
+                                </a>
+                                <div class="dropdown">
+                                    <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                                        <i class="fas fa-ellipsis-v"></i>
+                                    </button>
+                                    <ul class="dropdown-menu dropdown-menu-end">
+                                        <li><a class="dropdown-item" href="{% url 'asset_update' asset.id %}">
+                                            <i class="fas fa-edit me-2"></i>Edit
+                                        </a></li>
+                                        <li><a class="dropdown-item" href="{% url 'asset_transfer' asset.id %}">
+                                            <i class="fas fa-exchange-alt me-2"></i>Transfer
+                                        </a></li>
+                                        <li><a class="dropdown-item" href="{% url 'asset_maintenance' asset.id %}">
+                                            <i class="fas fa-tools me-2"></i>Maintenance
+                                        </a></li>
+                                        <li><hr class="dropdown-divider"></li>
+                                        <li><a class="dropdown-item text-danger" href="#" data-bs-toggle="modal" data-bs-target="#deleteModal{{ asset.id }}">
+                                            <i class="fas fa-trash-alt me-2"></i>Delete
+                                        </a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Delete Modal -->
+                    <div class="modal fade" id="deleteModal{{ asset.id }}" tabindex="-1" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title">Confirm Delete</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <p>Are you sure you want to delete asset <strong>{{ asset.name }}</strong>?</p>
+                                    <p class="text-danger"><small>This action cannot be undone.</small></p>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                    <form action="{% url 'asset_delete' asset.id %}" method="post">
+                                        {% csrf_token %}
+                                        <button type="submit" class="btn btn-danger">Delete</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <div class="text-center py-5">
+                <i class="fas fa-search fa-3x text-muted mb-3"></i>
+                <h5>No assets found</h5>
+                <p class="text-muted">Try adjusting your search or filter criteria</p>
+                <a href="{% url 'asset_create' %}" class="btn btn-primary mt-2">
+                    <i class="fas fa-plus me-1"></i>Add New Asset
+                </a>
+            </div>
+            {% endif %}
+        </div>
+        
+        <!-- List View (Hidden by default) -->
+        <div class="card-body d-none" id="listView">
+            {% if assets %}
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Asset ID</th>
+                            <th>Name</th>
+                            <th>Category</th>
+                            <th>Location</th>
+                            <th>Status</th>
+                            <th>Custodian</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for asset in assets %}
+                        <tr>
+                            <td>{{ asset.asset_id }}</td>
+                            <td>{{ asset.name }}</td>
+                            <td>{{ asset.category|default:"Uncategorized" }}</td>
+                            <td>{{ asset.location|default:"No Location" }}</td>
+                            <td>
+                                <span class="badge 
+                                    {% if asset.status == 'active' %}badge-status-active
+                                    {% elif asset.status == 'inactive' %}badge-status-inactive
+                                    {% elif asset.status == 'maintenance' %}badge-status-maintenance
+                                    {% else %}badge-status-{{asset.status}}{% endif %}">
+                                    {{ asset.get_status_display }}
+                                </span>
+                            </td>
+                            <td>{{ asset.custodian.user.get_full_name|default:"Unassigned" }}</td>
+                            <td>
+                                <a href="{% url 'asset_detail' asset.id %}" class="btn btn-sm btn-outline-primary">
+                                    <i class="fas fa-eye"></i>
+                                </a>
+                                <a href="{% url 'asset_update' asset.id %}" class="btn btn-sm btn-outline-secondary">
+                                    <i class="fas fa-edit"></i>
+                                </a>
+                                <div class="dropdown d-inline">
+                                    <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                                        <i class="fas fa-ellipsis-v"></i>
+                                    </button>
+                                    <ul class="dropdown-menu dropdown-menu-end">
+                                        <li><a class="dropdown-item" href="{% url 'asset_transfer' asset.id %}">
+                                            <i class="fas fa-exchange-alt me-2"></i>Transfer
+                                        </a></li>
+                                        <li><a class="dropdown-item" href="{% url 'asset_maintenance' asset.id %}">
+                                            <i class="fas fa-tools me-2"></i>Maintenance
+                                        </a></li>
+                                        <li><hr class="dropdown-divider"></li>
+                                        <li><a class="dropdown-item text-danger" href="#" data-bs-toggle="modal" data-bs-target="#deleteModal{{ asset.id }}">
+                                            <i class="fas fa-trash-alt me-2"></i>Delete
+                                        </a></li>
+                                    </ul>
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% else %}
+            <div class="text-center py-5">
+                <i class="fas fa-search fa-3x text-muted mb-3"></i>
+                <h5>No assets found</h5>
+                <p class="text-muted">Try adjusting your search or filter criteria</p>
+                <a href="{% url 'asset_create' %}" class="btn btn-primary mt-2">
+                    <i class="fas fa-plus me-1"></i>Add New Asset
+                </a>
+            </div>
+            {% endif %}
+        </div>
+        
+        <!-- Pagination -->
+        {% if is_paginated %}
+        <div class="card-footer bg-white">
+            <nav>
+                <ul class="pagination justify-content-center mb-0">
+                    {% if page_obj.has_previous %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page=1{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">
+                            <i class="fas fa-angle-double-left"></i>
+                        </a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">
+                            <i class="fas fa-angle-left"></i>
+                        </a>
+                    </li>
+                    {% endif %}
+                    
+                    {% for num in page_obj.paginator.page_range %}
+                        {% if page_obj.number == num %}
+                        <li class="page-item active">
+                            <span class="page-link">{{ num }}</span>
+                        </li>
+                        {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ num }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">
+                                {{ num }}
+                            </a>
+                        </li>
+                        {% endif %}
+                    {% endfor %}
+                    
+                    {% if page_obj.has_next %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.next_page_number }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">
+                            <i class="fas fa-angle-right"></i>
+                        </a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">
+                            <i class="fas fa-angle-double-right"></i>
+                        </a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </nav>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<!-- JavaScript for Grid/List View Toggle -->
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const gridViewBtn = document.getElementById('gridViewBtn');
+        const listViewBtn = document.getElementById('listViewBtn');
+        const gridView = document.getElementById('gridView');
+        const listView = document.getElementById('listView');
+        
+        gridViewBtn.addEventListener('click', function() {
+            gridView.classList.remove('d-none');
+            listView.classList.add('d-none');
+            gridViewBtn.classList.add('active');
+            listViewBtn.classList.remove('active');
+            localStorage.setItem('assetViewPreference', 'grid');
+        });
+        
+        listViewBtn.addEventListener('click', function() {
+            gridView.classList.add('d-none');
+            listView.classList.remove('d-none');
+            gridViewBtn.classList.remove('active');
+            listViewBtn.classList.add('active');
+            localStorage.setItem('assetViewPreference', 'list');
+        });
+        
+        // Check saved preference
+        const savedView = localStorage.getItem('assetViewPreference');
+        if (savedView === 'list') {
+            listViewBtn.click();
+        }
+    });
+</script>
+{% endblock %}

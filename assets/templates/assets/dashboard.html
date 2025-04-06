@@ -1,0 +1,240 @@
+{% extends 'assets/base.html' %}
+{% load static %}
+
+{% block title %}Dashboard - Asset Management{% endblock %}
+
+{% block content %}
+<div class="container">
+    <!-- Dashboard Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="h3"><i class="fas fa-tachometer-alt me-2"></i>Dashboard</h1>
+        <div>
+            <a href="{% url 'assets:asset_create' %}" class="btn btn-primary">
+                <i class="fas fa-plus me-1"></i>Add New Asset
+            </a>
+        </div>
+    </div>
+
+    <!-- Stats Cards -->
+    <div class="row mb-4">
+        <div class="col-md-3 col-sm-6 mb-3">
+            <div class="card stat-card">
+                <div class="stat-icon">
+                    <i class="fas fa-laptop"></i>
+                </div>
+                <div class="stat-value">{{ total_assets }}</div>
+                <div class="stat-label">Total Assets</div>
+            </div>
+        </div>
+        <div class="col-md-3 col-sm-6 mb-3">
+            <div class="card stat-card">
+                <div class="stat-icon">
+                    <i class="fas fa-tools"></i>
+                </div>
+                <div class="stat-value">{{ maintenance_count }}</div>
+                <div class="stat-label">Pending Maintenance</div>
+            </div>
+        </div>
+        <div class="col-md-3 col-sm-6 mb-3">
+            <div class="card stat-card">
+                <div class="stat-icon">
+                    <i class="fas fa-exclamation-triangle"></i>
+                </div>
+                <div class="stat-value">{{ warranty_expiring }}</div>
+                <div class="stat-label">Warranty Expiring</div>
+            </div>
+        </div>
+        <div class="col-md-3 col-sm-6 mb-3">
+            <div class="card stat-card">
+                <div class="stat-icon">
+                    <i class="fas fa-dollar-sign"></i>
+                </div>
+                <div class="stat-value">{{ total_value|floatformat:2 }}</div>
+                <div class="stat-label">Asset Value</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mb-4">
+        <!-- Asset Status Chart -->
+        <div class="col-md-6 mb-4">
+            <div class="card h-100">
+                <div class="card-header">
+                    <i class="fas fa-chart-pie me-2"></i>Asset Status Distribution
+                </div>
+                <div class="card-body">
+                    <canvas id="assetStatusChart" height="250"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Asset Value by Department -->
+        <div class="col-md-6 mb-4">
+            <div class="card h-100">
+                <div class="card-header">
+                    <i class="fas fa-chart-bar me-2"></i>Asset Value by Department
+                </div>
+                <div class="card-body">
+                    <canvas id="departmentValueChart" height="250"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- Recent Activities -->
+        <div class="col-md-6 mb-4">
+            <div class="card h-100">
+                <div class="card-header">
+                    <i class="fas fa-history me-2"></i>Recent Activities
+                </div>
+                <div class="card-body">
+                    <div class="list-group list-group-flush">
+                        {% for log in recent_logs %}
+                        <div class="list-group-item p-3 d-flex">
+                            <div class="me-3">
+                                {% if log.action == 'create' %}
+                                <i class="fas fa-plus-circle text-success fa-lg"></i>
+                                {% elif log.action == 'update' %}
+                                <i class="fas fa-edit text-primary fa-lg"></i>
+                                {% elif log.action == 'delete' %}
+                                <i class="fas fa-trash text-danger fa-lg"></i>
+                                {% elif log.action == 'transfer' %}
+                                <i class="fas fa-exchange-alt text-warning fa-lg"></i>
+                                {% else %}
+                                <i class="fas fa-info-circle text-info fa-lg"></i>
+                                {% endif %}
+                            </div>
+                            <div>
+                                <div class="d-flex justify-content-between">
+                                    <h6 class="mb-1">{{ log.get_action_display }} {{ log.model_name }}</h6>
+                                    <small class="text-muted">{{ log.timestamp|timesince }} ago</small>
+                                </div>
+                                <p class="mb-1">{{ log.user }} {{ log.get_action_display|lower }}d {{ log.model_name|lower }}</p>
+                            </div>
+                        </div>
+                        {% empty %}
+                        <div class="text-center py-4">
+                            <i class="fas fa-info-circle fa-2x text-muted mb-3"></i>
+                            <p>No recent activities found.</p>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                <div class="card-footer text-center">
+                    <a href="{% url 'assets:audit_logs' %}" class="btn btn-sm btn-outline-primary">View All Logs</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Upcoming Maintenance -->
+        <div class="col-md-6 mb-4">
+            <div class="card h-100">
+                <div class="card-header">
+                    <i class="fas fa-tools me-2"></i>Upcoming Maintenance
+                </div>
+                <div class="card-body">
+                    <div class="list-group list-group-flush">
+                        {% for maintenance in upcoming_maintenance %}
+                        <div class="list-group-item p-3">
+                            <div class="d-flex justify-content-between">
+                                <h6 class="mb-1">{{ maintenance.asset.name }}</h6>
+                                <span class="badge {% if maintenance.schedule_date|date:'Y-m-d' <= today %}bg-danger{% else %}bg-warning text-dark{% endif %}">
+                                    {{ maintenance.schedule_date|date:"M d, Y" }}
+                                </span>
+                            </div>
+                            <p class="mb-1">{{ maintenance.get_maintenance_type_display }} - {{ maintenance.description|truncatechars:60 }}</p>
+                            <small class="text-muted">
+                                <i class="fas fa-user me-1"></i>{{ maintenance.created_by|default:"System" }}
+                            </small>
+                        </div>
+                        {% empty %}
+                        <div class="text-center py-4">
+                            <i class="fas fa-check-circle fa-2x text-success mb-3"></i>
+                            <p>No upcoming maintenance scheduled.</p>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                <div class="card-footer text-center">
+                    <a href="{% url 'assets:maintenance_list' %}" class="btn btn-sm btn-outline-primary">View All Maintenance</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Asset Status Distribution Chart
+    const statusCtx = document.getElementById('assetStatusChart').getContext('2d');
+    const statusChart = new Chart(statusCtx, {
+        type: 'doughnut',
+        data: {
+            labels: ['Active', 'Inactive', 'Maintenance', 'Lost/Stolen', 'Disposed'],
+            datasets: [{
+                data: [
+                    {{ status_counts.active|default:0 }},
+                    {{ status_counts.inactive|default:0 }},
+                    {{ status_counts.maintenance|default:0 }},
+                    {{ status_counts.lost|default:0 }} + {{ status_counts.stolen|default:0 }},
+                    {{ status_counts.disposed|default:0 }}
+                ],
+                backgroundColor: [
+                    '#28a745',
+                    '#6c757d',
+                    '#ffc107',
+                    '#dc3545',
+                    '#343a40'
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    position: 'bottom'
+                }
+            }
+        }
+    });
+
+    // Department Asset Value Chart
+    const deptCtx = document.getElementById('departmentValueChart').getContext('2d');
+    const deptChart = new Chart(deptCtx, {
+        type: 'bar',
+        data: {
+            labels: [{% for dept in dept_values %}'{{ dept.name }}',{% endfor %}],
+            datasets: [{
+                label: 'Asset Value',
+                data: [{% for dept in dept_values %}{{ dept.total_value|default:0 }},{% endfor %}],
+                backgroundColor: '#8B1C32',
+                borderColor: '#6B0C22',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        callback: function(value) {
+                            return '$' + value.toLocaleString();
+                        }
+                    }
+                }
+            },
+            plugins: {
+                legend: {
+                    display: false
+                }
+            }
+        }
+    });
+</script>
+{% endblock %}

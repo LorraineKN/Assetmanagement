@@ -1,14 +1,9 @@
 # users/urls.py
 from django.urls import path
 
-from .views import (
-    CustomPasswordResetConfirmView,
-    CustomPasswordResetView,
-    EmailVerificationView,
-    SignInView,
-    SignUpView,
-    ResendVerificationView
-)
+from .views import (CustomPasswordResetConfirmView, CustomPasswordResetView,
+                    EmailVerificationView, ResendVerificationView, SignInView,
+                    SignUpView)
 
 urlpatterns = [
     path("", SignInView.as_view(), name="signin"),
@@ -24,5 +19,9 @@ urlpatterns = [
         CustomPasswordResetConfirmView.as_view(),
         name="password_reset_confirm",
     ),
-    path('resend-verification/', ResendVerificationView.as_view(), name='resend_verification'),
+    path(
+        "resend-verification/",
+        ResendVerificationView.as_view(),
+        name="resend_verification",
+    ),
 ]

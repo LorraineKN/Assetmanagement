@@ -168,7 +168,7 @@ class UserSession(models.Model):
     """User session tracking"""
 
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="sessions")
-    session_key = models.CharField(max_length=40)
+    session_key = models.CharField(max_length=40, null=True, blank=True)
     login_time = models.DateTimeField(auto_now_add=True)
     logout_time = models.DateTimeField(blank=True, null=True)
     ip_address = models.GenericIPAddressField(blank=True, null=True)

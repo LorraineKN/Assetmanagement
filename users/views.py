@@ -2,9 +2,9 @@
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth import authenticate, login
-
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.contrib.auth.views import PasswordResetConfirmView, PasswordResetView
+from django.contrib.auth.views import (PasswordResetConfirmView,
+                                       PasswordResetView)
 from django.core.mail import send_mail
 from django.shortcuts import redirect
 from django.template.loader import render_to_string
@@ -21,7 +21,7 @@ class SignInView(FormView):
 
     template_name = "users/signin.html"
     form_class = SignInForm
-    success_url = reverse_lazy("user_dashboard")
+    success_url = reverse_lazy("assets:dashboard")
 
     def form_valid(self, form):
         email = form.cleaned_data.get("email")
@@ -44,8 +44,16 @@ class SignInView(FormView):
                 )
                 return self.form_invalid(form)
 
-            # Login the user
+            # Login the user - this creates the session
             login(self.request, user)
+
+            # Now the session key exists and we can create our UserSession
+            UserSession.objects.create(
+                user=user,
+                session_key=self.request.session.session_key,
+                ip_address=self.request.META.get("REMOTE_ADDR"),
+                user_agent=self.request.META.get("HTTP_USER_AGENT"),
+            )
 
             # Set session expiry based on remember_me
             if not remember_me:
@@ -62,14 +70,6 @@ class SignInView(FormView):
                 ip_address=self.request.META.get("REMOTE_ADDR"),
                 user_agent=self.request.META.get("HTTP_USER_AGENT"),
                 description="User logged in",
-            )
-
-            # Create user session record
-            UserSession.objects.create(
-                user=user,
-                session_key=self.request.session.session_key,
-                ip_address=self.request.META.get("REMOTE_ADDR"),
-                user_agent=self.request.META.get("HTTP_USER_AGENT"),
             )
 
             # Determine where to redirect based on user_type
@@ -183,23 +183,29 @@ class CustomPasswordResetConfirmView(PasswordResetConfirmView):
     template_name = "users/password_reset_confirm.html"
     success_url = reverse_lazy("password_reset_complete")
 
+
 class ResendVerificationView(LoginRequiredMixin, View):
     def get(self, request, *args, **kwargs):
         user = request.user
-        
+
         # Only resend if email isn't already verified
         if not user.email_verified:
             verification_token = user.generate_verification_token()
-            verification_link = f"{settings.BASE_URL}/verify-email/{verification_token}/"
-            
+            verification_link = (
+                f"{settings.BASE_URL}/verify-email/{verification_token}/"
+            )
+
             # Send verification email
-            subject = 'Verify your email address'
-            html_message = render_to_string('emails/verification_email.html', {
-                'user': user,
-                'verification_link': verification_link,
-                'site_name': settings.SITE_NAME
-            })
-            
+            subject = "Verify your email address"
+            html_message = render_to_string(
+                "emails/verification_email.html",
+                {
+                    "user": user,
+                    "verification_link": verification_link,
+                    "site_name": settings.SITE_NAME,
+                },
+            )
+
             send_mail(
                 subject=subject,
                 message=f"Please verify your email: {verification_link}",
@@ -208,12 +214,15 @@ class ResendVerificationView(LoginRequiredMixin, View):
                 html_message=html_message,
                 fail_silently=False,
             )
-            
-            messages.success(request, 'Verification email has been resent. Please check your inbox.')
+
+            messages.success(
+                request, "Verification email has been resent. Please check your inbox."
+            )
         else:
-            messages.info(request, 'Your email is already verified.')
-        
-        return redirect('signin')
+            messages.info(request, "Your email is already verified.")
+
+        return redirect("signin")
+
 
 # class SignOutView(LoginRequiredMixin, RedirectView):
 #     """Handle user sign out and log the activity"""
