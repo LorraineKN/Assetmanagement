@@ -1,3 +1,5 @@
+import secrets
+
 from django.contrib.auth.models import AbstractUser, BaseUserManager
 from django.db import models
 from django.utils.translation import gettext_lazy as _
@@ -80,6 +82,11 @@ class User(AbstractUser):
     @property
     def is_manager(self):
         return self.user_type == "MANAGER"
+
+    def generate_verification_token(self):
+        self.verification_token = secrets.token_urlsafe(32)
+        self.save()
+        return self.verification_token
 
 
 class UserPreference(models.Model):

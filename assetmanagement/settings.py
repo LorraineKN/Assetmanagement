@@ -117,14 +117,15 @@ USE_I18N = True
 USE_TZ = True
 
 
-AUTH_USER_MODEL = 'users.User'
+AUTH_USER_MODEL = "users.User"
 
-LOGIN_URL = 'login'
-LOGIN_REDIRECT_URL = 'profile' 
-LOGOUT_REDIRECT_URL = 'login'
+LOGIN_URL = "login"
+LOGIN_REDIRECT_URL = "profile"
+LOGOUT_REDIRECT_URL = "login"
 
 
 BASE_URL = "http://localhost:8000"
+SITE_NAME = "Assetflow"
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
