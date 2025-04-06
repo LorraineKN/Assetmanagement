@@ -9,8 +9,8 @@ User = get_user_model()
 class BaseModel(models.Model):
     """Abstract base model for common fields"""
 
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
+    created_at = models.DateTimeField(auto_now_add=True, null=True, blank=True)
+    updated_at = models.DateTimeField(auto_now=True, null=True, blank=True)
     created_by = models.ForeignKey(
         User, on_delete=models.SET_NULL, null=True, blank=True, related_name="+"
     )
@@ -130,7 +130,7 @@ class Asset(BaseModel):
         ("maintenance", "Under Maintenance"),
     )
 
-    asset_id = models.CharField(max_length=50, unique=True)  # Custom asset ID
+    asset_id = models.CharField(max_length=50, unique=True, blank=True, null=True)
     name = models.CharField(max_length=200)
     description = models.TextField(blank=True, null=True)
     category = models.ForeignKey(

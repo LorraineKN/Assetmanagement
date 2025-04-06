@@ -117,6 +117,15 @@ USE_I18N = True
 USE_TZ = True
 
 
+AUTH_USER_MODEL = 'users.User'
+
+LOGIN_URL = 'login'
+LOGIN_REDIRECT_URL = 'profile' 
+LOGOUT_REDIRECT_URL = 'login'
+
+
+BASE_URL = "http://localhost:8000"
+
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
@@ -131,13 +140,12 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 # Email settings
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
-EMAIL_HOST = "your-smtp-server.com"
+EMAIL_HOST = "smtp.gmail.com"
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = "your-email@example.com"
-EMAIL_HOST_PASSWORD = "your-password"
-DEFAULT_FROM_EMAIL = "noreply@yourdomain.com"
-REPLY_TO_EMAIL = "support@yourdomain.com"
+EMAIL_HOST_USER = "lorrainewira@gmail.com"
+EMAIL_HOST_PASSWORD = "kbxl betk pcfs jtsv"
+DEFAULT_FROM_EMAIL = " Assetmanagement lorrainewira@gmail.com"
 
 # Celery settings
 CELERY_BROKER_URL = "redis://localhost:6379/0"
