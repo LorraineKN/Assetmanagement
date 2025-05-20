@@ -15,9 +15,9 @@ SECRET_KEY = "django-insecure-a(y%c2a3&*k8=$*sj8on0gqcz^g6fb3393c5-bs_5*q*ls6k37
 DEBUG = True
 
 ALLOWED_HOSTS = [
-    'assetmanagement-production-9585.up.railway.app',
-    'localhost',
-    '127.0.0.1'
+    "assetmanagement-production-9585.up.railway.app",
+    "localhost",
+    "127.0.0.1",
 ]
 # Application definition
 
@@ -152,12 +152,12 @@ MEDIA_ROOT = os.path.join(BASE_DIR, "media/")
 
 # CSRF Trusted Origins
 CSRF_TRUSTED_ORIGINS = [
-    'https://assetmanagement-production-9585.up.railway.app',
-    'https://*.railway.app'
+    "https://assetmanagement-production-9585.up.railway.app",
+    "https://*.railway.app",
 ]
 
 # If you're using frontend on a different domain, add CORS settings
 CORS_ALLOWED_ORIGINS = [
-    'https://assetmanagement-production-9585.up.railway.app',
-    'https://*.railway.app'
+    "https://assetmanagement-production-9585.up.railway.app",
+    "https://*.railway.app",
 ]

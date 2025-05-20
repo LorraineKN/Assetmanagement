@@ -1,9 +1,14 @@
 # users/urls.py
 from django.urls import path
 
-from .views import (CustomPasswordResetConfirmView, CustomPasswordResetView,
-                    EmailVerificationView, ResendVerificationView, SignInView,
-                    SignUpView)
+from .views import (
+    CustomPasswordResetConfirmView,
+    CustomPasswordResetView,
+    EmailVerificationView,
+    ResendVerificationView,
+    SignInView,
+    SignUpView,
+)
 
 urlpatterns = [
     path("", SignInView.as_view(), name="signin"),
