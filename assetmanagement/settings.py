@@ -144,3 +144,8 @@ CELERY_TIMEZONE = "UTC"
 # File upload settings
 MEDIA_URL = "/media/"
 MEDIA_ROOT = os.path.join(BASE_DIR, "media/")
+
+
+CSRF_TRUSTED_ORIGINS = [
+    'https://assetmanagement-production-f762.up.railway.app',
+]
