@@ -2,27 +2,13 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Count, Q, Sum
 from django.urls import reverse_lazy
 from django.utils import timezone
-from django.views.generic import (
-    CreateView,
-    DeleteView,
-    DetailView,
-    ListView,
-    TemplateView,
-    UpdateView,
-)
+from django.views.generic import (CreateView, DeleteView, DetailView, ListView,
+                                  TemplateView, UpdateView)
 
 from users.models import User
 
-from .models import (
-    Asset,
-    AuditLog,
-    Category,
-    Custodian,
-    Department,
-    Location,
-    MaintenanceRecord,
-    Vendor,
-)
+from .models import (Asset, AuditLog, Category, Custodian, Department,
+                     Location, MaintenanceRecord, Vendor)
 
 
 class DashboardView(TemplateView):

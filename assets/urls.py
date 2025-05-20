@@ -1,24 +1,12 @@
 from django.contrib.auth.decorators import login_required
 from django.urls import path
 
-from .views import (
-    AssetCreateView,
-    AssetDeleteView,
-    AssetDetailView,
-    AssetListView,
-    AssetUpdateView,
-    AuditLogListView,
-    CustodianListView,
-    DashboardView,
-    DepartmentListView,
-    LocationListView,
-    MaintenanceCreateView,
-    MaintenanceDeleteView,
-    MaintenanceDetailView,
-    MaintenanceListView,
-    MaintenanceUpdateView,
-    VendorListView,
-)
+from .views import (AssetCreateView, AssetDeleteView, AssetDetailView,
+                    AssetListView, AssetUpdateView, AuditLogListView,
+                    CustodianListView, DashboardView, DepartmentListView,
+                    LocationListView, MaintenanceCreateView,
+                    MaintenanceDeleteView, MaintenanceDetailView,
+                    MaintenanceListView, MaintenanceUpdateView, VendorListView)
 
 app_name = "assets"
 

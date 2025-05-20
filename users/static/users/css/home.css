@@ -1,0 +1,526 @@
+/* =========================================================
+   AssetPro - Comprehensive Asset Management Solution
+   main.css - Core styling file
+   ========================================================= */
+
+/* ---- ROOT VARIABLES ---- */
+:root {
+    --primary: #5d3fd3;
+    --primary-light: #7654e8;
+    --primary-dark: #4527a0;
+    --secondary: #2a3f54;
+    --secondary-light: #3c5676;
+    --maroon: #9c27b0;
+    --maroon-light: #ba68c8;
+    --maroon-dark: #7b1fa2;
+    --success: #28a745;
+    --danger: #dc3545;
+    --warning: #ffc107;
+    --info: #17a2b8;
+    --light: #f8f9fa;
+    --dark: #343a40;
+    --white: #ffffff;
+    --gray-100: #f8f9fa;
+    --gray-200: #e9ecef;
+    --gray-300: #dee2e6;
+    --gray-400: #ced4da;
+    --gray-500: #adb5bd;
+    --gray-600: #6c757d;
+    --gray-700: #495057;
+    --gray-800: #343a40;
+    --gray-900: #212529;
+    --font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    --border-radius: 0.5rem;
+    --transition: all 0.3s ease;
+    --box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+    --box-shadow-lg: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+  }
+  
+  /* ---- GENERAL STYLES ---- */
+  body {
+    font-family: var(--font-family);
+    color: var(--gray-800);
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    font-weight: 700;
+    line-height: 1.2;
+    margin-bottom: 1rem;
+  }
+  
+  a {
+    color: var(--maroon);
+    text-decoration: none;
+    transition: var(--transition);
+  }
+  
+  a:hover {
+    color: var(--maroon-dark);
+    text-decoration: none;
+  }
+  
+  .btn {
+    border-radius: var(--border-radius);
+    font-weight: 600;
+    padding: 0.625rem 1.25rem;
+    transition: var(--transition);
+  }
+  
+  .btn-lg {
+    padding: 0.75rem 1.5rem;
+    font-size: 1.125rem;
+  }
+  
+  .btn-maroon {
+    background-color: var(--maroon);
+    border-color: var(--maroon);
+    color: var(--white);
+  }
+  
+  .btn-maroon:hover {
+    background-color: var(--maroon-dark);
+    border-color: var(--maroon-dark);
+    color: var(--white);
+  }
+  
+  .btn-outline-maroon {
+    border-color: var(--maroon);
+    color: var(--maroon);
+  }
+  
+  .btn-outline-maroon:hover {
+    background-color: var(--maroon);
+    color: var(--white);
+  }
+  
+  .text-maroon {
+    color: var(--maroon) !important;
+  }
+  
+  .form-control, .form-select {
+    border-radius: var(--border-radius);
+    padding: 0.625rem 1rem;
+    border: 1px solid var(--gray-300);
+  }
+  
+  .form-control:focus, .form-select:focus {
+    border-color: var(--maroon-light);
+    box-shadow: 0 0 0 0.2rem rgba(156, 39, 176, 0.25);
+  }
+  
+  /* ---- BACKGROUNDS ---- */
+  .bg-gradient-primary {
+    background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+  }
+  
+  .bg-gradient-secondary {
+    background: linear-gradient(135deg, var(--secondary), var(--secondary-light));
+  }
+  
+  /* ---- NAVBAR ---- */
+  .navbar {
+    padding: 1rem 0;
+    box-shadow: var(--box-shadow);
+  }
+  
+  .navbar-brand {
+    font-weight: 700;
+    font-size: 1.5rem;
+  }
+  
+  .navbar-brand span {
+    color: var(--maroon);
+  }
+  
+  .nav-link {
+    font-weight: 600;
+    padding: 0.5rem 1rem !important;
+    transition: var(--transition);
+  }
+  
+  .nav-link:hover {
+    color: var(--maroon) !important;
+  }
+  
+  .navbar-toggler {
+    border: none;
+    padding: 0.5rem;
+  }
+  
+  .navbar-toggler:focus {
+    box-shadow: none;
+  }
+  
+  /* ---- HERO SECTION ---- */
+  .hero-section {
+    padding: 6rem 0;
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .hero-image {
+    position: relative;
+  }
+  
+  .hero-image img {
+    border-radius: var(--border-radius);
+    transition: var(--transition);
+    transform: perspective(1000px) rotateY(-10deg);
+    box-shadow: var(--box-shadow-lg);
+  }
+  
+  .floating-badge {
+    position: absolute;
+    background-color: var(--white);
+    border-radius: 2rem;
+    padding: 0.5rem 1rem;
+    box-shadow: var(--box-shadow);
+    display: flex;
+    align-items: center;
+    font-weight: 600;
+    font-size: 0.875rem;
+  }
+  
+  .floating-badge i {
+    margin-right: 0.5rem;
+    color: var(--maroon);
+  }
+  
+  .badge-users {
+    top: 10%;
+    left: -10%;
+  }
+  
+  .badge-assets {
+    bottom: 15%;
+    right: -10%;
+  }
+  
+  .rating-icons {
+    display: flex;
+    align-items: center;
+  }
+  
+  /* ---- TRUSTED BY SECTION ---- */
+  .trusted-by {
+    padding: 3rem 0;
+  }
+  
+  .client-logo {
+    max-height: 2.5rem;
+    filter: grayscale(100%);
+    opacity: 0.7;
+    transition: var(--transition);
+  }
+  
+  .client-logo:hover {
+    filter: grayscale(0%);
+    opacity: 1;
+  }
+  
+  /* ---- FEATURES SECTION ---- */
+  .feature-card {
+    border: 1px solid var(--gray-200);
+    border-radius: var(--border-radius);
+    transition: var(--transition);
+  }
+  
+  .feature-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--box-shadow);
+    border-color: var(--maroon-light);
+  }
+  
+  .feature-icon {
+    height: 64px;
+    width: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background-color: rgba(156, 39, 176, 0.1);
+  }
+  
+  /* ---- BENEFITS SECTION ---- */
+  .benefit-item {
+    margin-bottom: 2rem;
+  }
+  
+  .benefit-icon {
+    min-width: 2.5rem;
+  }
+  
+  /* ---- TESTIMONIALS SECTION ---- */
+  .testimonial-card {
+    border: 1px solid var(--gray-200);
+    border-radius: var(--border-radius);
+    transition: var(--transition);
+  }
+  
+  .testimonial-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--box-shadow);
+    border-color: var(--maroon-light);
+  }
+  
+  .testimonial-text {
+    font-style: italic;
+    color: var(--gray-700);
+  }
+  
+  /* ---- PRICING SECTION ---- */
+  .pricing-card {
+    border: 1px solid var(--gray-200);
+    border-radius: var(--border-radius);
+    transition: var(--transition);
+    position: relative;
+  }
+  
+  .pricing-card:hover {
+    transform: translateY(-10px);
+    box-shadow: var(--box-shadow-lg);
+  }
+  
+  .pricing-popular {
+    border: 2px solid var(--maroon);
+    transform: scale(1.05);
+  }
+  
+  .pricing-popular:hover {
+    transform: scale(1.05) translateY(-10px);
+  }
+  
+  .popular-badge {
+    position: absolute;
+    top: -15px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: var(--maroon);
+    color: var(--white);
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 0.25rem 1rem;
+    border-radius: 1rem;
+  }
+  
+  /* ---- CTA SECTION ---- */
+  .cta-section {
+    padding: 5rem 0;
+  }
+  
+  /* ---- CONTACT SECTION ---- */
+  .contact-form-container, .demo-form-container {
+    border: 1px solid var(--gray-200);
+    border-radius: var(--border-radius);
+    background-color: var(--white);
+  }
+  
+  .contact-icon {
+    width: 1.5rem;
+    text-align: center;
+  }
+  
+  /* ---- FOOTER ---- */
+  .footer {
+    background-color: var(--secondary);
+    color: var(--white);
+    padding: 5rem 0 0;
+  }
+  
+  .footer-logo {
+    font-size: 1.75rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+  }
+  
+  .footer-social a {
+    color: var(--white);
+    font-size: 1.25rem;
+    margin-right: 1rem;
+    transition: var(--transition);
+  }
+  
+  .footer-social a:hover {
+    color: var(--maroon-light);
+  }
+  
+  .footer h5 {
+    font-size: 1.125rem;
+    margin-bottom: 1.5rem;
+    position: relative;
+    padding-bottom: 0.75rem;
+  }
+  
+  .footer h5::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 40px;
+    height: 2px;
+    background-color: var(--maroon);
+  }
+  
+  .footer-links {
+    list-style: none;
+    padding-left: 0;
+  }
+  
+  .footer-links li {
+    margin-bottom: 0.75rem;
+  }
+  
+  .footer-links a {
+    color: var(--gray-300);
+    transition: var(--transition);
+  }
+  
+  .footer-links a:hover {
+    color: var(--white);
+    padding-left: 5px;
+  }
+  
+  .footer-bottom {
+    background-color: var(--secondary-dark);
+    padding: 1.5rem 0;
+    margin-top: 4rem;
+  }
+  
+  /* ---- ANIMATIONS ---- */
+  @keyframes float {
+    0% {
+      transform: translateY(0px);
+    }
+    50% {
+      transform: translateY(-10px);
+    }
+    100% {
+      transform: translateY(0px);
+    }
+  }
+  
+  .hero-image img {
+    animation: float 6s ease-in-out infinite;
+  }
+  
+  .floating-badge {
+    animation: float 5s ease-in-out infinite;
+  }
+  
+  /* ---- RESPONSIVE STYLES ---- */
+  @media (max-width: 992px) {
+    .hero-section {
+      padding: 4rem 0;
+    }
+    
+    .floating-badge {
+      padding: 0.375rem 0.875rem;
+      font-size: 0.75rem;
+    }
+    
+    .badge-users {
+      top: 5%;
+      left: 0;
+    }
+    
+    .badge-assets {
+      bottom: 10%;
+      right: 0;
+    }
+    
+    .pricing-popular {
+      transform: scale(1);
+    }
+    
+    .pricing-popular:hover {
+      transform: translateY(-10px);
+    }
+  }
+  
+  @media (max-width: 768px) {
+    h1.display-4 {
+      font-size: 2.5rem;
+    }
+    
+    .hero-image img {
+      transform: none;
+    }
+    
+    .floating-badge {
+      display: none;
+    }
+    
+    .trusted-by {
+      padding: 2rem 0;
+    }
+    
+    .client-logo {
+      max-height: 2rem;
+      margin-bottom: 1.5rem;
+    }
+  }
+  
+  @media (max-width: 576px) {
+    h1.display-4 {
+      font-size: 2rem;
+    }
+    
+    .btn-lg {
+      padding: 0.625rem 1.25rem;
+      font-size: 1rem;
+    }
+    
+    .hero-section {
+      padding: 3rem 0;
+    }
+    
+    .cta-section {
+      padding: 3rem 0;
+    }
+    
+    .footer {
+      padding: 3rem 0 0;
+    }
+  }
+  
+  /* ---- UTILITIES ---- */
+  .shadow-sm {
+    box-shadow: var(--box-shadow) !important;
+  }
+  
+  .shadow {
+    box-shadow: var(--box-shadow-lg) !important;
+  }
+  
+  .rounded {
+    border-radius: var(--border-radius) !important;
+  }
+  
+  /* ---- CUSTOM ANIMATIONS ---- */
+  .feature-card:hover .feature-icon, 
+  .benefit-item:hover .benefit-icon {
+    transform: scale(1.1);
+  }
+  
+  .btn:hover {
+    transform: translateY(-2px);
+  }
+  
+  /* Additional styles to improve form elements */
+  .form-control::placeholder, .form-select::placeholder {
+    color: var(--gray-500);
+    opacity: 0.7;
+  }
+  
+  /* Improve accessibility focus states */
+  a:focus, button:focus, input:focus, textarea:focus, select:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(156, 39, 176, 0.25);
+  }
+  
+  /* Smooth scrolling for page anchors */
+  html {
+    scroll-behavior: smooth;
+  }

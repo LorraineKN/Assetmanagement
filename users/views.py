@@ -2,7 +2,8 @@ from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.contrib.auth.views import PasswordResetConfirmView, PasswordResetView
+from django.contrib.auth.views import (PasswordResetConfirmView,
+                                       PasswordResetView)
 from django.core.mail import send_mail
 from django.shortcuts import redirect
 from django.template.loader import render_to_string
@@ -12,6 +13,10 @@ from django.views.generic import CreateView, FormView, TemplateView, View
 
 from .forms import SignInForm, SignUpForm
 from .models import User, UserActivity, UserSession
+
+
+class HomePageView(TemplateView):
+    template_name = "users/home.html"
 
 
 class SignInView(FormView):

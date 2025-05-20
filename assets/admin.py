@@ -2,20 +2,9 @@ from django.contrib import admin
 from django.db.models import Sum
 from django.utils.html import format_html
 
-from .models import (
-    Asset,
-    AssetTransfer,
-    AuditLog,
-    Category,
-    Custodian,
-    Department,
-    DepreciationRecord,
-    FinancialTransaction,
-    Location,
-    MaintenanceRecord,
-    Tag,
-    Vendor,
-)
+from .models import (Asset, AssetTransfer, AuditLog, Category, Custodian,
+                     Department, DepreciationRecord, FinancialTransaction,
+                     Location, MaintenanceRecord, Tag, Vendor)
 
 
 class BaseAdmin(admin.ModelAdmin):

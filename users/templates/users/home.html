@@ -1,0 +1,529 @@
+{% extends 'users/base.html' %}
+{% load static %}
+
+{% block title %}AssetPro - Comprehensive Asset Management Solution{% endblock %}
+
+{% block extra_css %}
+  <link rel="stylesheet" href="{% static 'users/css/home.css' %}">
+{% endblock %}
+
+{% block full_width_content %}
+<!-- Hero Section -->
+<section class="hero-section py-5 bg-gradient-primary text-white">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6 mb-5 mb-lg-0">
+                <h1 class="display-4 fw-bold mb-4">Simplify Your Asset Management Journey</h1>
+                <p class="lead mb-4">Gain complete visibility and control over your organization's assets with our comprehensive asset management platform. Track, manage, and optimize with ease.</p>
+                <div class="d-flex flex-wrap gap-2">
+                    <a href="{% url 'signup' %}" class="btn btn-light btn-lg px-4">Get Started</a>
+                    <a href="#demo" class="btn btn-outline-light btn-lg px-4">Request Demo</a>
+                </div>
+                <div class="mt-4 d-flex align-items-center">
+                    <div class="d-flex">
+                        <div class="rating-icons">
+                            <i class="fas fa-star text-warning"></i>
+                            <i class="fas fa-star text-warning"></i>
+                            <i class="fas fa-star text-warning"></i>
+                            <i class="fas fa-star text-warning"></i>
+                            <i class="fas fa-star text-warning"></i>
+                        </div>
+                    </div>
+                    <p class="ms-2 mb-0">Trusted by over 2,000+ companies worldwide</p>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="hero-image text-center position-relative">
+                    <img src="{% static 'users/img/dashboard.png' %}" alt="Dashboard Preview" class="img-fluid  rounded shadow-lg">
+                    {% comment %} <div class="floating-badge badge-users">
+                        <i class="fas fa-users"></i>
+                        <span>2,500+ Users</span>
+                    </div> {% endcomment %}
+                    <div class="floating-badge badge-assets">
+                        <i class="fas fa-chart-line"></i>
+                        <span>98% Accuracy</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Trusted By Section -->
+<section class="trusted-by py-5 bg-light">
+    <div class="container">
+        <h6 class="text-center text-muted mb-4">TRUSTED BY INDUSTRY LEADERS</h6>
+        <div class="row justify-content-center align-items-center">
+            <div class="col-6 col-md-2 mb-4 mb-md-0">
+                <img src="{% static 'users/img/logoipsum-logo-4.svg' %}" alt="Client 1" class="img-fluid client-logo">
+            </div>
+            <div class="col-6 col-md-2 mb-4 mb-md-0">
+                <img src="{% static 'users/img/logoipsum-logo-5.svg' %}" alt="Client 2" class="img-fluid client-logo">
+            </div>
+            <div class="col-6 col-md-2 mb-4 mb-md-0">
+                <img src="{% static 'users/img/logoipsum-logo-7.svg' %}" alt="Client 3" class="img-fluid client-logo">
+            </div>
+            <div class="col-6 col-md-2 mb-4 mb-md-0">
+                <img src="{% static 'users/img/company-logo-2.svg' %}" alt="Client 4" class="img-fluid client-logo">
+            </div>
+            <div class="col-6 col-md-2">
+                <img src="{% static 'users/img/company-logo-1.svg' %}" alt="Client 5" class="img-fluid client-logo">
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Features Section -->
+<section id="features" class="py-5">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="fw-bold">Powerful Features for Complete Asset Management</h2>
+            <p class="lead text-muted">Everything you need to track, manage, and optimize your assets</p>
+        </div>
+        
+        <div class="row g-4">
+            <div class="col-md-6 col-lg-4">
+                <div class="feature-card h-100 p-4 rounded shadow-sm">
+                    <div class="feature-icon mb-3">
+                        <i class="fas fa-search fa-2x text-maroon"></i>
+                    </div>
+                    <h4>Asset Tracking</h4>
+                    <p class="text-muted">Real-time tracking of all your assets with detailed information about location, condition, and maintenance history.</p>
+                </div>
+            </div>
+            
+            <div class="col-md-6 col-lg-4">
+                <div class="feature-card h-100 p-4 rounded shadow-sm">
+                    <div class="feature-icon mb-3">
+                        <i class="fas fa-clipboard-list fa-2x text-maroon"></i>
+                    </div>
+                    <h4>Inventory Management</h4>
+                    <p class="text-muted">Streamline your inventory with automated tracking, reordering, and comprehensive reporting capabilities.</p>
+                </div>
+            </div>
+            
+            <div class="col-md-6 col-lg-4">
+                <div class="feature-card h-100 p-4 rounded shadow-sm">
+                    <div class="feature-icon mb-3">
+                        <i class="fas fa-chart-pie fa-2x text-maroon"></i>
+                    </div>
+                    <h4>Analytics & Reporting</h4>
+                    <p class="text-muted">Data-driven insights with customizable dashboards and comprehensive reports for informed decision-making.</p>
+                </div>
+            </div>
+            
+            <div class="col-md-6 col-lg-4">
+                <div class="feature-card h-100 p-4 rounded shadow-sm">
+                    <div class="feature-icon mb-3">
+                        <i class="fas fa-tools fa-2x text-maroon"></i>
+                    </div>
+                    <h4>Maintenance Scheduling</h4>
+                    <p class="text-muted">Proactive maintenance planning with automated notifications and service history tracking to maximize asset lifespan.</p>
+                </div>
+            </div>
+            
+            <div class="col-md-6 col-lg-4">
+                <div class="feature-card h-100 p-4 rounded shadow-sm">
+                    <div class="feature-icon mb-3">
+                        <i class="fas fa-qrcode fa-2x text-maroon"></i>
+                    </div>
+                    <h4>Barcode & QR Scanning</h4>
+                    <p class="text-muted">Seamless asset identification with built-in scanning capabilities for quick access to asset information.</p>
+                </div>
+            </div>
+            
+            <div class="col-md-6 col-lg-4">
+                <div class="feature-card h-100 p-4 rounded shadow-sm">
+                    <div class="feature-icon mb-3">
+                        <i class="fas fa-mobile-alt fa-2x text-maroon"></i>
+                    </div>
+                    <h4>Mobile Access</h4>
+                    <p class="text-muted">Access your asset management system anytime, anywhere with our responsive mobile application.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Benefits Section -->
+<section id="benefits" class="py-5 bg-light">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6 mb-4 mb-lg-0">
+                <img src="{% static 'users/img/feature-banner.png' %}" alt="Benefits Illustration" class="img-fluid">
+            </div>
+            <div class="col-lg-6">
+                <h2 class="fw-bold mb-4">Why Choose Our Asset Management Solution?</h2>
+                
+                <div class="benefit-item d-flex mb-4">
+                    <div class="benefit-icon me-3">
+                        <i class="fas fa-check-circle text-success fa-2x"></i>
+                    </div>
+                    <div>
+                        <h5>Reduce Operational Costs</h5>
+                        <p class="text-muted">Optimize asset utilization and maintenance to reduce unnecessary expenses and extend asset lifespans.</p>
+                    </div>
+                </div>
+                
+                <div class="benefit-item d-flex mb-4">
+                    <div class="benefit-icon me-3">
+                        <i class="fas fa-check-circle text-success fa-2x"></i>
+                    </div>
+                    <div>
+                        <h5>Increase Productivity</h5>
+                        <p class="text-muted">Streamline workflows and automate routine tasks to free up your team's time for more valuable activities.</p>
+                    </div>
+                </div>
+                
+                <div class="benefit-item d-flex mb-4">
+                    <div class="benefit-icon me-3">
+                        <i class="fas fa-check-circle text-success fa-2x"></i>
+                    </div>
+                    <div>
+                        <h5>Improve Decision Making</h5>
+                        <p class="text-muted">Access real-time data and analytics to make informed decisions about asset acquisition, maintenance, and retirement.</p>
+                    </div>
+                </div>
+                
+                <div class="benefit-item d-flex">
+                    <div class="benefit-icon me-3">
+                        <i class="fas fa-check-circle text-success fa-2x"></i>
+                    </div>
+                    <div>
+                        <h5>Ensure Compliance</h5>
+                        <p class="text-muted">Stay compliant with regulatory requirements with comprehensive audit trails and documentation.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Testimonials Section -->
+<section id="testimonials" class="py-5">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="fw-bold">What Our Clients Say</h2>
+            <p class="lead text-muted">Trusted by businesses of all sizes across various industries</p>
+        </div>
+        
+        <div class="row">
+            <div class="col-lg-4 mb-4">
+                <div class="testimonial-card h-100 p-4 shadow-sm rounded">
+                    <div class="testimonial-rating mb-3">
+                        <i class="fas fa-star text-warning"></i>
+                        <i class="fas fa-star text-warning"></i>
+                        <i class="fas fa-star text-warning"></i>
+                        <i class="fas fa-star text-warning"></i>
+                        <i class="fas fa-star text-warning"></i>
+                    </div>
+                    <p class="testimonial-text mb-4">
+                        "AssetPro has completely transformed how we manage our company assets. The intuitive interface and powerful features have saved us countless hours and significantly reduced our operational costs."
+                    </p>
+                    <div class="testimonial-author d-flex align-items-center">
+                        <img src="https://i.pravatar.cc/150?img=35" alt="Sarah Johnson" class="rounded-circle me-3" width="50">
+                        <div>
+                            <h6 class="mb-0">Sarah Johnson</h6>
+                            <p class="mb-0 text-muted small">Operations Director, TechCorp</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-lg-4 mb-4">
+                <div class="testimonial-card h-100 p-4 shadow-sm rounded">
+                    <div class="testimonial-rating mb-3">
+                        <i class="fas fa-star text-warning"></i>
+                        <i class="fas fa-star text-warning"></i>
+                        <i class="fas fa-star text-warning"></i>
+                        <i class="fas fa-star text-warning"></i>
+                        <i class="fas fa-star text-warning"></i>
+                    </div>
+                    <p class="testimonial-text mb-4">
+                        "The reporting and analytics capabilities in AssetPro have given us unprecedented visibility into our asset utilization. We've been able to make data-driven decisions that have significantly improved our ROI."
+                    </p>
+                    <div class="testimonial-author d-flex align-items-center">
+                        <img src="https://i.pravatar.cc/150?img=36" alt="Michael Rodriguez" class="rounded-circle me-3" width="50">
+                        <div>
+                            <h6 class="mb-0">Michael Rodriguez</h6>
+                            <p class="mb-0 text-muted small">CFO, Global Logistics Inc.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-lg-4 mb-4">
+                <div class="testimonial-card h-100 p-4 shadow-sm rounded">
+                    <div class="testimonial-rating mb-3">
+                        <i class="fas fa-star text-warning"></i>
+                        <i class="fas fa-star text-warning"></i>
+                        <i class="fas fa-star text-warning"></i>
+                        <i class="fas fa-star text-warning"></i>
+                        <i class="fas fa-star-half-alt text-warning"></i>
+                    </div>
+                    <p class="testimonial-text mb-4">
+                        "The customer support team at AssetPro is exceptional. They were with us every step of the way during implementation and continue to provide outstanding support as our needs evolve."
+                    </p>
+                    <div class="testimonial-author d-flex align-items-center">
+                        <img src="https://i.pravatar.cc/150?img=45" alt="Lisa Chen" class="rounded-circle me-3" width="50">
+                        <div>
+                            <h6 class="mb-0">Lisa Chen</h6>
+                            <p class="mb-0 text-muted small">IT Manager, Healthcare Solutions</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Pricing Section -->
+<section id="pricing" class="py-5 bg-light">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="fw-bold">Flexible Pricing Plans</h2>
+            <p class="lead text-muted">Choose the plan that best fits your business needs</p>
+        </div>
+        
+        <div class="row justify-content-center">
+            <div class="col-lg-4 col-md-6 mb-4">
+                <div class="pricing-card h-100 p-4 rounded shadow-sm text-center">
+                    <h5 class="text-muted text-uppercase mb-3">Starter</h5>
+                    <h2 class="fw-bold mb-0">$49<span class="text-muted fs-5">/mo</span></h2>
+                    <p class="text-muted mb-4">Perfect for small businesses</p>
+                    <hr>
+                    <ul class="list-unstyled mb-4">
+                        <li class="mb-2"><i class="fas fa-check text-success me-2"></i> Up to 500 assets</li>
+                        <li class="mb-2"><i class="fas fa-check text-success me-2"></i> 5 user accounts</li>
+                        <li class="mb-2"><i class="fas fa-check text-success me-2"></i> Basic reporting</li>
+                        <li class="mb-2"><i class="fas fa-check text-success me-2"></i> QR code scanning</li>
+                        <li class="mb-2 text-muted"><i class="fas fa-times text-danger me-2"></i> API access</li>
+                        <li class="mb-2 text-muted"><i class="fas fa-times text-danger me-2"></i> Custom fields</li>
+                        <li class="mb-2 text-muted"><i class="fas fa-times text-danger me-2"></i> Priority support</li>
+                    </ul>
+                    <a href="{% url 'signup' %}" class="btn btn-outline-maroon w-100">Get Started</a>
+                </div>
+            </div>
+            
+            <div class="col-lg-4 col-md-6 mb-4">
+                <div class="pricing-card pricing-popular h-100 p-4 rounded shadow text-center">
+                    <div class="popular-badge">MOST POPULAR</div>
+                    <h5 class="text-muted text-uppercase mb-3">Professional</h5>
+                    <h2 class="fw-bold mb-0">$149<span class="text-muted fs-5">/mo</span></h2>
+                    <p class="text-muted mb-4">Ideal for growing businesses</p>
+                    <hr>
+                    <ul class="list-unstyled mb-4">
+                        <li class="mb-2"><i class="fas fa-check text-success me-2"></i> Up to 2,000 assets</li>
+                        <li class="mb-2"><i class="fas fa-check text-success me-2"></i> 20 user accounts</li>
+                        <li class="mb-2"><i class="fas fa-check text-success me-2"></i> Advanced reporting</li>
+                        <li class="mb-2"><i class="fas fa-check text-success me-2"></i> QR code scanning</li>
+                        <li class="mb-2"><i class="fas fa-check text-success me-2"></i> API access</li>
+                        <li class="mb-2"><i class="fas fa-check text-success me-2"></i> Custom fields</li>
+                        <li class="mb-2 text-muted"><i class="fas fa-times text-danger me-2"></i> Priority support</li>
+                    </ul>
+                    <a href="{% url 'signup' %}" class="btn btn-maroon w-100">Get Started</a>
+                </div>
+            </div>
+            
+            <div class="col-lg-4 col-md-6 mb-4">
+                <div class="pricing-card h-100 p-4 rounded shadow-sm text-center">
+                    <h5 class="text-muted text-uppercase mb-3">Enterprise</h5>
+                    <h2 class="fw-bold mb-0">$349<span class="text-muted fs-5">/mo</span></h2>
+                    <p class="text-muted mb-4">For large organizations</p>
+                    <hr>
+                    <ul class="list-unstyled mb-4">
+                        <li class="mb-2"><i class="fas fa-check text-success me-2"></i> Unlimited assets</li>
+                        <li class="mb-2"><i class="fas fa-check text-success me-2"></i> Unlimited users</li>
+                        <li class="mb-2"><i class="fas fa-check text-success me-2"></i> Custom reporting</li>
+                        <li class="mb-2"><i class="fas fa-check text-success me-2"></i> QR code scanning</li>
+                        <li class="mb-2"><i class="fas fa-check text-success me-2"></i> API access</li>
+                        <li class="mb-2"><i class="fas fa-check text-success me-2"></i> Custom fields</li>
+                        <li class="mb-2"><i class="fas fa-check text-success me-2"></i> Priority support</li>
+                    </ul>
+                    <a href="{% url 'signup' %}" class="btn btn-outline-maroon w-100">Get Started</a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="text-center mt-4">
+            <p class="text-muted">Need a custom solution? <a href="#contact" class="text-maroon">Contact us</a> for enterprise pricing.</p>
+        </div>
+    </div>
+</section>
+
+<!-- CTA Section -->
+<section class="cta-section py-5 bg-gradient-secondary text-white">
+    <div class="container text-center">
+        <h2 class="fw-bold mb-4">Ready to optimize your asset management?</h2>
+        <p class="lead mb-4">Join thousands of businesses that trust AssetPro for their asset management needs.</p>
+        <div class="d-flex justify-content-center gap-3">
+            <a href="{% url 'signup' %}" class="btn btn-light btn-lg px-4">Get Started</a>
+            <a href="#demo" class="btn btn-outline-light btn-lg px-4">Schedule Demo</a>
+        </div>
+    </div>
+</section>
+
+<!-- Contact Section -->
+<section id="contact" class="py-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-6 mb-4 mb-lg-0">
+                <h2 class="fw-bold mb-4">Get in Touch</h2>
+                <p class="lead mb-4">Have questions about our asset management solution? Our team is here to help.</p>
+                
+                <div class="contact-info">
+                    <div class="d-flex mb-3">
+                        <div class="contact-icon me-3">
+                            <i class="fas fa-map-marker-alt text-maroon"></i>
+                        </div>
+                        <div>
+                            <h6 class="mb-1">Address</h6>
+                            <p class="text-muted mb-0">Bogani Street, Suite 456<br>Rongai, Nairobi</p>
+                        </div>
+                    </div>
+                    
+                    <div class="d-flex mb-3">
+                        <div class="contact-icon me-3">
+                            <i class="fas fa-phone text-maroon"></i>
+                        </div>
+                        <div>
+                            <h6 class="mb-1">Phone</h6>
+                            <p class="text-muted mb-0">+254 (759) 876-4567</p>
+                        </div>
+                    </div>
+                    
+                    <div class="d-flex mb-3">
+                        <div class="contact-icon me-3">
+                            <i class="fas fa-envelope text-maroon"></i>
+                        </div>
+                        <div>
+                            <h6 class="mb-1">Email</h6>
+                            <p class="text-muted mb-0">info@assetpro.com</p>
+                        </div>
+                    </div>
+                    
+                    <div class="d-flex">
+                        <div class="contact-icon me-3">
+                            <i class="fas fa-clock text-maroon"></i>
+                        </div>
+                        <div>
+                            <h6 class="mb-1">Business Hours</h6>
+                            <p class="text-muted mb-0">Monday-Friday: 9AM-6PM EST<br>Saturday-Sunday: Closed</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-lg-6">
+                <div class="contact-form-container p-4 rounded shadow-sm">
+                    <h4 class="mb-4">Send us a message</h4>
+                    <form id="contactForm">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="name" class="form-label">Name</label>
+                                <input type="text" class="form-control" id="name" placeholder="Your name" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="email" class="form-label">Email</label>
+                                <input type="email" class="form-control" id="email" placeholder="Your email" required>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="company" class="form-label">Company</label>
+                            <input type="text" class="form-control" id="company" placeholder="Your company">
+                        </div>
+                        <div class="mb-3">
+                            <label for="subject" class="form-label">Subject</label>
+                            <input type="text" class="form-control" id="subject" placeholder="Subject">
+                        </div>
+                        <div class="mb-3">
+                            <label for="message" class="form-label">Message</label>
+                            <textarea class="form-control" id="message" rows="4" placeholder="Your message" required></textarea>
+                        </div>
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-maroon">Send Message</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Demo Section -->
+<section id="demo" class="py-5 bg-light">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6 mb-4 mb-lg-0">
+                <h2 class="fw-bold mb-4">Schedule a Personalized Demo</h2>
+                <p class="lead mb-4">See firsthand how AssetPro can transform your asset management processes.</p>
+                <ul class="list-unstyled demo-benefits">
+                    <li class="mb-3"><i class="fas fa-check-circle text-success me-2"></i> Live walkthrough of key features</li>
+                    <li class="mb-3"><i class="fas fa-check-circle text-success me-2"></i> Personalized Q&A session</li>
+                    <li class="mb-3"><i class="fas fa-check-circle text-success me-2"></i> Customized to your specific needs</li>
+                    <li class="mb-3"><i class="fas fa-check-circle text-success me-2"></i> No obligation, completely free</li>
+                </ul>
+                <p class="text-muted">Our demos typically take 30-45 minutes and are conducted by product specialists who can answer all your questions.</p>
+            </div>
+            
+            <div class="col-lg-6">
+                <div class="demo-form-container p-4 rounded shadow-sm">
+                    <h4 class="mb-4">Request a Demo</h4>
+                    <form id="demoForm">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="demoName" class="form-label">Name</label>
+                                <input type="text" class="form-control" id="demoName" placeholder="Your name" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="demoEmail" class="form-label">Email</label>
+                                <input type="email" class="form-control" id="demoEmail" placeholder="Your email" required>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="demoCompany" class="form-label">Company</label>
+                                <input type="text" class="form-control" id="demoCompany" placeholder="Your company" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="demoPhone" class="form-label">Phone</label>
+                                <input type="text" class="form-control" id="demoPhone" placeholder="Your phone number" required>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="demoSize" class="form-label">Company Size</label>
+                            <select class="form-select" id="demoSize" required>
+                                <option value="" selected disabled>Select company size</option>
+                                <option value="1-10">1-10 employees</option>
+                                <option value="11-50">11-50 employees</option>
+                                <option value="51-200">51-200 employees</option>
+                                <option value="201-500">201-500 employees</option>
+                                <option value="501+">501+ employees</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="demoInterest" class="form-label">What are you most interested in?</label>
+                            <select class="form-select" id="demoInterest" required>
+                                <option value="" selected disabled>Select your primary interest</option>
+                                <option value="asset-tracking">Asset Tracking</option>
+                                <option value="inventory-management">Inventory Management</option>
+                                <option value="maintenance">Maintenance Scheduling</option>
+                                <option value="analytics">Analytics & Reporting</option>
+                                <option value="mobile">Mobile Access</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="demoMessage" class="form-label">Additional Information</label>
+                            <textarea class="form-control" id="demoMessage" rows="3" placeholder="Tell us about your specific needs"></textarea>
+                        </div>
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-maroon">Schedule Demo</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
