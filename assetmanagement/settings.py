@@ -16,6 +16,8 @@ DEBUG = True
 
 ALLOWED_HOSTS = [
     'assetmanagement-production-f762.up.railway.app',
+    'localhost',
+    '127.0.0.1'
 ]
 
 
@@ -149,6 +151,14 @@ MEDIA_URL = "/media/"
 MEDIA_ROOT = os.path.join(BASE_DIR, "media/")
 
 
+# CSRF Trusted Origins
 CSRF_TRUSTED_ORIGINS = [
     'https://assetmanagement-production-f762.up.railway.app',
+    'https://*.railway.app'
+]
+
+# If you're using frontend on a different domain, add CORS settings
+CORS_ALLOWED_ORIGINS = [
+    'https://assetmanagement-production-f762.up.railway.app',
+    'https://*.railway.app'
 ]
