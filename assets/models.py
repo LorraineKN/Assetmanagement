@@ -1,8 +1,9 @@
+from decimal import Decimal
+
 from django.contrib.auth import get_user_model
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 from django.utils import timezone
-from decimal import Decimal
 
 User = get_user_model()
 
@@ -192,12 +193,11 @@ class Asset(BaseModel):
             years_owned = (timezone.now().date() - self.purchase_date).days / 365.25
             # Convert depreciation_factor to Decimal before multiplication
             depreciation_factor = min(
-                Decimal(str(years_owned)) * (self.depreciation_rate / Decimal('100')), 
-                Decimal('1')
+                Decimal(str(years_owned)) * (self.depreciation_rate / Decimal("100")),
+                Decimal("1"),
             )
             self.current_value = max(
-                self.purchase_price * (Decimal('1') - depreciation_factor), 
-                Decimal('0')
+                self.purchase_price * (Decimal("1") - depreciation_factor), Decimal("0")
             )
         super().save(*args, **kwargs)
 
