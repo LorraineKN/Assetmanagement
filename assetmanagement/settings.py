@@ -116,7 +116,7 @@ LOGIN_REDIRECT_URL = "profile"
 LOGOUT_REDIRECT_URL = "login"
 
 
-BASE_URL = "https://assetmanagement-production-f762.up.railway.app"
+BASE_URL = "https://assetmanagement-production-9585.up.railway.app"
 SITE_NAME = "Assetflow"
 
 # Static files (CSS, JavaScript, Images)
