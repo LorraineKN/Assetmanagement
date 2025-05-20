@@ -181,17 +181,24 @@ class Asset(BaseModel):
         return f"{self.asset_id} - {self.name}"
 
     def save(self, *args, **kwargs):
-        """Calculate current value based on depreciation if not set"""
-        if (
-            not self.current_value
-            and self.purchase_price
-            and self.purchase_date
-            and self.depreciation_rate
-        ):
-            years_owned = (timezone.now().date() - self.purchase_date).days / 365.25
-            depreciation_factor = min(years_owned * (self.depreciation_rate / 100), 1)
-            self.current_value = max(self.purchase_price * (1 - depreciation_factor), 0)
-        super().save(*args, **kwargs)
+    """Calculate current value based on depreciation if not set"""
+    if (
+        not self.current_value
+        and self.purchase_price
+        and self.purchase_date
+        and self.depreciation_rate
+    ):
+        years_owned = (timezone.now().date() - self.purchase_date).days / 365.25
+        # Convert depreciation_factor to Decimal before multiplication
+        depreciation_factor = min(
+            Decimal(str(years_owned)) * (self.depreciation_rate / Decimal('100')), 
+            Decimal('1')
+        )
+        self.current_value = max(
+            self.purchase_price * (Decimal('1') - depreciation_factor), 
+            Decimal('0')
+        )
+    super().save(*args, **kwargs)
 
 
 class MaintenanceRecord(BaseModel):
