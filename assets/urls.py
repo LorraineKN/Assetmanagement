@@ -6,7 +6,8 @@ from .views import (AssetCreateView, AssetDeleteView, AssetDetailView,
                     CustodianListView, DashboardView, DepartmentListView,
                     LocationListView, MaintenanceCreateView,
                     MaintenanceDeleteView, MaintenanceDetailView,
-                    MaintenanceListView, MaintenanceUpdateView, VendorListView)
+                    MaintenanceListView, MaintenanceUpdateView, VendorListView,
+                    custodian_dashboard,  custodian_profile)
 
 app_name = "assets"
 
@@ -76,4 +77,6 @@ urlpatterns = [
         login_required(CustodianListView.as_view()),
         name="custodian_list",
     ),
+    path('profile/', login_required(custodian_profile), name='custodian_profile'),
+    path('custodian-dashboard/', login_required(custodian_dashboard), name='custodian_dashboard'),
 ]

@@ -1,5 +1,8 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.db.models import Count, Q, Sum
+from django.contrib.auth.decorators import login_required
+from django.db.models import  Q, Sum
+from django.shortcuts import render, get_object_or_404
+from django.http import JsonResponse
 from django.urls import reverse_lazy
 from django.utils import timezone
 from django.views.generic import (CreateView, DeleteView, DetailView, ListView,
@@ -542,3 +545,113 @@ class CustodianListView(LoginRequiredMixin, ListView):
     template_name = "custodians/custodian_list.html"
     context_object_name = "custodians"
     paginate_by = 20
+
+@login_required
+def custodian_dashboard(request):
+    """
+    Custodian dashboard view showing all assets assigned to the logged-in custodian
+    """
+    try:
+        # Get the custodian object for the current user
+        custodian = get_object_or_404(Custodian, user=request.user, is_active=True)
+    except Custodian.DoesNotExist:
+        # Handle case where user is not a custodian
+        return render(request, 'assets/not_custodian.html')
+    
+    # Get all assets assigned to this custodian
+    assets = Asset.objects.filter(custodian=custodian).select_related(
+        'category', 'location', 'location__department'
+    ).order_by('-created_at')
+    
+    # Calculate statistics
+    total_assets = assets.count()
+    active_assets = assets.filter(status='active').count()
+    maintenance_assets = assets.filter(status='maintenance').count()
+    retired_assets = assets.filter(status='retired').count()
+    
+    # Filter assets based on search parameters (for AJAX requests)
+    search_query = request.GET.get('search', '')
+    status_filter = request.GET.get('status', '')
+    
+    if search_query:
+        assets = assets.filter(
+            Q(name__icontains=search_query) |
+            Q(asset_code__icontains=search_query) |
+            Q(serial_number__icontains=search_query)
+        )
+    
+    if status_filter:
+        assets = assets.filter(status=status_filter)
+    
+    # If this is an AJAX request, return JSON response
+    if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+        assets_data = []
+        for asset in assets:
+            assets_data.append({
+                'id': asset.id,
+                'name': asset.name,
+                'asset_code': asset.asset_code,
+                'status': asset.status,
+                'status_display': asset.get_status_display(),
+                'category': asset.category.name if asset.category else 'Not Assigned',
+                'location': str(asset.location) if asset.location else 'Not Assigned',
+                'acquisition_date': asset.acquisition_date.strftime('%b %d, %Y') if asset.acquisition_date else 'N/A',
+                'acquisition_cost': float(asset.acquisition_cost) if asset.acquisition_cost else 0.00,
+                'serial_number': asset.serial_number or '',
+                'manufacturer': asset.manufacturer or '',
+            })
+        
+        return JsonResponse({
+            'assets': assets_data,
+            'total_count': total_assets,
+            'filtered_count': len(assets_data)
+        })
+    
+    context = {
+        'custodian': custodian,
+        'assets': assets,
+        'total_assets': total_assets,
+        'active_assets': active_assets,
+        'maintenance_assets': maintenance_assets,
+        'retired_assets': retired_assets,
+    }
+    
+    return render(request, 'assets/custodian_dashboard.html', context)
+
+@login_required
+def asset_detail(request, asset_id):
+    """
+    Asset detail view for custodians
+    """
+    try:
+        custodian = get_object_or_404(Custodian, user=request.user, is_active=True)
+    except Custodian.DoesNotExist:
+        return render(request, 'assets/not_custodian.html')
+    
+    # Ensure the asset belongs to this custodian
+    asset = get_object_or_404(Asset, id=asset_id, custodian=custodian)
+    
+    context = {
+        'asset': asset,
+        'custodian': custodian,
+    }
+    
+    return render(request, 'assets/asset_detail.html', context)
+
+@login_required
+def custodian_profile(request):
+    """
+    Custodian profile view
+    """
+    try:
+        custodian = get_object_or_404(Custodian, user=request.user, is_active=True)
+    except Custodian.DoesNotExist:
+        return render(request, 'assets/not_custodian.html')
+    
+    # Get recent activity
+    recent_assets = Asset.objects.filter(custodian=custodian).order_by('-updated_at')[:5]
+    
+    context = {
+        'custodian': custodian,
+        'recent_assets': recent_assets,
+    }

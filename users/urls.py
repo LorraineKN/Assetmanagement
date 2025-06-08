@@ -7,7 +7,7 @@ from .views import (CustomPasswordResetConfirmView, CustomPasswordResetView,
 
 urlpatterns = [
     path("", HomePageView.as_view(), name="home"),
-    path("sigin", SignInView.as_view(), name="signin"),
+    path("signin", SignInView.as_view(), name="signin"),
     path("signup/", SignUpView.as_view(), name="signup"),
     path(
         "verify-email/<str:token>/",

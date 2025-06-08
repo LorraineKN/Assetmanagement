@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Custodian Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .dashboard-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .dashboard-header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .welcome-section {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .welcome-text h1 {
+            color: #2c3e50;
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .welcome-text p {
+            color: #7f8c8d;
+            font-size: 1.1rem;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 15px 25px;
+            border-radius: 50px;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        .user-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 25px;
+            text-align: center;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        .stat-icon {
+            width: 60px;
+            height: 60px;
+            margin: 0 auto 15px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: white;
+        }
+
+        .stat-icon.total { background: linear-gradient(135deg, #667eea, #764ba2); }
+        .stat-icon.active { background: linear-gradient(135deg, #56ab2f, #a8e6cf); }
+        .stat-icon.maintenance { background: linear-gradient(135deg, #f093fb, #f5576c); }
+        .stat-icon.retired { background: linear-gradient(135deg, #4facfe, #00f2fe); }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #2c3e50;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            color: #7f8c8d;
+            font-size: 1rem;
+            font-weight: 500;
+        }
+
+        .assets-section {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .section-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #2c3e50;
+        }
+
+        .search-filter-container {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .search-box, .filter-select {
+            padding: 12px 20px;
+            border: 2px solid #e1e8ed;
+            border-radius: 25px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: white;
+        }
+
+        .search-box:focus, .filter-select:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .assets-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 25px;
+        }
+
+        .asset-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            border: 1px solid #e1e8ed;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .asset-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+        }
+
+        .asset-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+        }
+
+        .asset-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 20px;
+        }
+
+        .asset-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #2c3e50;
+            margin-bottom: 5px;
+        }
+
+        .asset-code {
+            font-size: 0.9rem;
+            color: #7f8c8d;
+            font-family: 'Courier New', monospace;
+            background: #f8f9fa;
+            padding: 4px 8px;
+            border-radius: 6px;
+        }
+
+        .status-badge {
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .status-active { background: #d4edda; color: #155724; }
+        .status-maintenance { background: #f8d7da; color: #721c24; }
+        .status-retired { background: #d1ecf1; color: #0c5460; }
+
+        .asset-details {
+            display: grid;
+            gap: 12px;
+        }
+
+        .detail-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .detail-icon {
+            width: 35px;
+            height: 35px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #f8f9fa;
+            color: #667eea;
+            font-size: 0.9rem;
+        }
+
+        .detail-content {
+            flex: 1;
+        }
+
+        .detail-label {
+            font-size: 0.85rem;
+            color: #7f8c8d;
+            font-weight: 500;
+            margin-bottom: 2px;
+        }
+
+        .detail-value {
+            font-size: 1rem;
+            color: #2c3e50;
+            font-weight: 600;
+        }
+
+        .asset-actions {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid #e1e8ed;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .action-btn {
+            padding: 10px 20px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+        }
+
+        .btn-secondary {
+            background: #f8f9fa;
+            color: #667eea;
+            border: 2px solid #667eea;
+        }
+
+        .btn-primary:hover, .btn-secondary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #7f8c8d;
+        }
+
+        .empty-state i {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            color: #bdc3c7;
+        }
+
+        .empty-state h3 {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .dashboard-container {
+                padding: 15px;
+            }
+
+            .welcome-section {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .welcome-text h1 {
+                font-size: 2rem;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+                gap: 15px;
+            }
+
+            .assets-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .search-filter-container {
+                flex-direction: column;
+                width: 100%;
+            }
+
+            .search-box, .filter-select {
+                width: 100%;
+            }
+
+            .section-header {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .asset-actions {
+                flex-direction: column;
+            }
+
+            .action-btn {
+                justify-content: center;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .dashboard-header {
+                padding: 20px;
+            }
+
+            .assets-section {
+                padding: 20px;
+            }
+
+            .asset-card {
+                padding: 20px;
+            }
+
+            .stat-number {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Dashboard Header -->
+        <div class="dashboard-header">
+            <div class="welcome-section">
+                <div class="welcome-text">
+                    <h1>Asset Dashboard</h1>
+                    <p>Manage and monitor your assigned assets</p>
+                </div>
+                <div class="user-info">
+                    <div class="user-avatar">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <div>
+                        <div style="font-weight: 600;">{{ user.get_full_name|default:user.username }}</div>
+                        <div style="font-size: 0.9rem; opacity: 0.8;">{{ custodian.department.name|default:"No Department" }}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Statistics Cards -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon total">
+                    <i class="fas fa-boxes"></i>
+                </div>
+                <div class="stat-number">{{ total_assets }}</div>
+                <div class="stat-label">Total Assets</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon active">
+                    <i class="fas fa-check-circle"></i>
+                </div>
+                <div class="stat-number">{{ active_assets }}</div>
+                <div class="stat-label">Active Assets</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon maintenance">
+                    <i class="fas fa-tools"></i>
+                </div>
+                <div class="stat-number">{{ maintenance_assets }}</div>
+                <div class="stat-label">Under Maintenance</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon retired">
+                    <i class="fas fa-archive"></i>
+                </div>
+                <div class="stat-number">{{ retired_assets }}</div>
+                <div class="stat-label">Retired Assets</div>
+            </div>
+        </div>
+
+        <!-- Assets Section -->
+        <div class="assets-section">
+            <div class="section-header">
+                <h2 class="section-title">Your Assets</h2>
+                <div class="search-filter-container">
+                    <input type="text" class="search-box" placeholder="Search assets..." id="searchInput">
+                    <select class="filter-select" id="statusFilter">
+                        <option value="">All Status</option>
+                        <option value="active">Active</option>
+                        <option value="maintenance">Maintenance</option>
+                        <option value="retired">Retired</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="assets-grid" id="assetsGrid">
+                {% for asset in assets %}
+                <div class="asset-card" data-status="{{ asset.status|lower }}" data-name="{{ asset.name|lower }}" data-code="{{ asset.asset_code|lower }}">
+                    <div class="asset-header">
+                        <div>
+                            <div class="asset-title">{{ asset.name }}</div>
+                            <div class="asset-code">{{ asset.asset_code }}</div>
+                        </div>
+                        <span class="status-badge status-{{ asset.status|lower }}">
+                            {{ asset.get_status_display|default:asset.status }}
+                        </span>
+                    </div>
+
+                    <div class="asset-details">
+                        <div class="detail-row">
+                            <div class="detail-icon">
+                                <i class="fas fa-layer-group"></i>
+                            </div>
+                            <div class="detail-content">
+                                <div class="detail-label">Category</div>
+                                <div class="detail-value">{{ asset.category.name|default:"Not Assigned" }}</div>
+                            </div>
+                        </div>
+
+                        <div class="detail-row">
+                            <div class="detail-icon">
+                                <i class="fas fa-map-marker-alt"></i>
+                            </div>
+                            <div class="detail-content">
+                                <div class="detail-label">Location</div>
+                                <div class="detail-value">{{ asset.location|default:"Not Assigned" }}</div>
+                            </div>
+                        </div>
+
+                        <div class="detail-row">
+                            <div class="detail-icon">
+                                <i class="fas fa-calendar-alt"></i>
+                            </div>
+                            <div class="detail-content">
+                                <div class="detail-label">Acquired Date</div>
+                                <div class="detail-value">{{ asset.acquisition_date|date:"M d, Y"|default:"N/A" }}</div>
+                            </div>
+                        </div>
+
+                        <div class="detail-row">
+                            <div class="detail-icon">
+                                <i class="fas fa-dollar-sign"></i>
+                            </div>
+                            <div class="detail-content">
+                                <div class="detail-label">Value</div>
+                                <div class="detail-value">${{ asset.current_value|floatformat:2|default:"0.00" }}</div>
+                            </div>
+                        </div>
+
+                        {% if asset.serial_number %}
+                        <div class="detail-row">
+                            <div class="detail-icon">
+                                <i class="fas fa-barcode"></i>
+                            </div>
+                            <div class="detail-content">
+                                <div class="detail-label">Serial Number</div>
+                                <div class="detail-value">{{ asset.serial_number }}</div>
+                            </div>
+                        </div>
+                        {% endif %}
+
+                        {% if asset.manufacturer %}
+                        <div class="detail-row">
+                            <div class="detail-icon">
+                                <i class="fas fa-industry"></i>
+                            </div>
+                            <div class="detail-content">
+                                <div class="detail-label">Manufacturer</div>
+                                <div class="detail-value">{{ asset.manufacturer }}</div>
+                            </div>
+                        </div>
+                        {% endif %}
+                    </div>
+
+    
+                </div>
+                {% empty %}
+                <div class="empty-state">
+                    <i class="fas fa-inbox"></i>
+                    <h3>No Assets Found</h3>
+                    <p>You don't have any assets assigned to you yet.</p>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Search and Filter Functionality
+        const searchInput = document.getElementById('searchInput');
+        const statusFilter = document.getElementById('statusFilter');
+        const assetsGrid = document.getElementById('assetsGrid');
+        const assetCards = document.querySelectorAll('.asset-card');
+
+        function filterAssets() {
+            const searchTerm = searchInput.value.toLowerCase();
+            const statusTerm = statusFilter.value.toLowerCase();
+
+            assetCards.forEach(card => {
+                const name = card.dataset.name;
+                const code = card.dataset.code;
+                const status = card.dataset.status;
+
+                const matchesSearch = !searchTerm || 
+                    name.includes(searchTerm) || 
+                    code.includes(searchTerm);
+                
+                const matchesStatus = !statusTerm || status === statusTerm;
+
+                if (matchesSearch && matchesStatus) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+
+            // Show empty state if no assets are visible
+            const visibleCards = Array.from(assetCards).filter(card => 
+                card.style.display !== 'none'
+            );
+
+            const emptyState = document.querySelector('.empty-state');
+            if (visibleCards.length === 0 && assetCards.length > 0) {
+                if (!emptyState) {
+                    const emptyDiv = document.createElement('div');
+                    emptyDiv.className = 'empty-state';
+                    emptyDiv.innerHTML = `
+                        <i class="fas fa-search"></i>
+                        <h3>No Assets Found</h3>
+                        <p>No assets match your current search criteria.</p>
+                    `;
+                    assetsGrid.appendChild(emptyDiv);
+                }
+            } else if (emptyState && visibleCards.length > 0) {
+                emptyState.remove();
+            }
+        }
+
+        searchInput.addEventListener('input', filterAssets);
+        statusFilter.addEventListener('change', filterAssets);
+
+        // Add some smooth animations on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            const elements = document.querySelectorAll('.stat-card, .asset-card');
+            elements.forEach((el, index) => {
+                el.style.opacity = '0';
+                el.style.transform = 'translateY(20px)';
+                setTimeout(() => {
+                    el.style.transition = 'all 0.6s ease';
+                    el.style.opacity = '1';
+                    el.style.transform = 'translateY(0)';
+                }, index * 100);
+            });
+        });
+    </script>
+</body>
+</html>

@@ -24,7 +24,7 @@ class SignInView(FormView):
 
     template_name = "users/signin.html"
     form_class = SignInForm
-    success_url = reverse_lazy("assets:dashboard")
+    success_url = reverse_lazy("assets:custodian_dashboard")
 
     def form_valid(self, form):
         email = form.cleaned_data.get("email")

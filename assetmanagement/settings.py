@@ -120,6 +120,8 @@ LOGOUT_REDIRECT_URL = "login"
 BASE_URL = "http://localhost:8001"
 SITE_NAME = "Assetflow"
 
+LOGIN_URL = 'signin'
+
 # Static files (CSS, JavaScript, Images)
 
 STATIC_URL = "/static/"
