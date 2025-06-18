@@ -119,7 +119,7 @@ LOGOUT_REDIRECT_URL = "/admin/login/"
 
 
 # BASE_URL = "https://assetmanagement-production-9585.up.railway.app"
-BASE_URL = "http://localhost:8001"
+BASE_URL = "http://localhost:8000"
 SITE_NAME = "Assetflow"
 
 LOGIN_URL = 'signin'
@@ -142,8 +142,8 @@ EMAIL_HOST = "smtp.gmail.com"
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = "lorrainewira@gmail.com"
-EMAIL_HOST_PASSWORD = "kmxi mwrv iepg gxad"
-DEFAULT_FROM_EMAIL = "Assetmanagement lorrainewira@gmail.com"
+EMAIL_HOST_PASSWORD = "mleg eazr pkyh btzd"
+DEFAULT_FROM_EMAIL = 'Asset Management <lorrainewira@gmail.com>'
 
 # Celery settings
 CELERY_BROKER_URL = "redis://localhost:6379/0"

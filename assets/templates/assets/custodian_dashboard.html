@@ -404,6 +404,91 @@
                 font-size: 2rem;
             }
         }
+        /* Modal Styles */
+    .modal {
+        display: none;
+        position: fixed;
+        z-index: 1000;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0,0,0,0.5);
+        overflow: auto;
+        backdrop-filter: blur(5px);
+    }
+
+    .modal-content {
+        background-color: white;
+        margin: 10% auto;
+        padding: 30px;
+        border-radius: 15px;
+        box-shadow: 0 5px 30px rgba(0,0,0,0.3);
+        width: 90%;
+        max-width: 500px;
+        position: relative;
+        animation: modalopen 0.4s;
+    }
+
+    @keyframes modalopen {
+        from {opacity: 0; transform: translateY(-50px);}
+        to {opacity: 1; transform: translateY(0);}
+    }
+
+    .close-modal {
+        position: absolute;
+        top: 15px;
+        right: 20px;
+        font-size: 1.5rem;
+        cursor: pointer;
+        color: #7f8c8d;
+    }
+
+    .close-modal:hover {
+        color: #2c3e50;
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+    .form-group label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: 600;
+        color: #2c3e50;
+    }
+
+    .form-control {
+        width: 100%;
+        padding: 12px 15px;
+        border: 2px solid #e1e8ed;
+        border-radius: 8px;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+    }
+
+    .form-control:focus {
+        outline: none;
+        border-color: #667eea;
+        box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+        .modal-content {
+            margin: 20% auto;
+            width: 85%;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .modal-content {
+            margin: 25% auto;
+            width: 90%;
+            padding: 20px;
+        }
+    }
     </style>
 </head>
 <body>
@@ -472,6 +557,23 @@
                         <option value="retired">Retired</option>
                     </select>
                 </div>
+                <!-- Inside the asset-card div, after the asset-details section and before the closing div -->
+            <div class="asset-actions">
+                <!-- Maintenance Request Button -->
+                <button class="action-btn btn-primary maintenance-btn" 
+                        data-asset-id="{{ asset.id }}"
+                        data-asset-name="{{ asset.name }}">
+                    <i class="fas fa-tools"></i> Request Maintenance
+                </button>
+                
+                <!-- Clearance/Return Button -->
+                <button class="action-btn btn-secondary return-btn" 
+                        data-asset-id="{{ asset.id }}"
+                        data-asset-name="{{ asset.name }}">
+                    <i class="fas fa-exchange-alt"></i> Initiate Return
+                </button>
+            </div>
+                
             </div>
 
             <div class="assets-grid" id="assetsGrid">
@@ -565,6 +667,80 @@
             </div>
         </div>
     </div>
+    <!-- Maintenance Request Modal -->
+<div id="maintenanceModal" class="modal" style="display: none;">
+    <div class="modal-content">
+        <span class="close-modal">&times;</span>
+        <h3>Request Maintenance for <span id="modalAssetName"></span></h3>
+        <form id="maintenanceForm">
+            <input type="hidden" id="assetId" name="asset_id">
+            
+            <div class="form-group">
+                <label for="maintenanceType">Maintenance Type</label>
+                <select id="maintenanceType" name="maintenance_type" class="form-control" required>
+                    <option value="preventive">Preventive Maintenance</option>
+                    <option value="corrective">Corrective Maintenance</option>
+                    <option value="upgrade">Upgrade</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="problemDescription">Problem Description</label>
+                <textarea id="problemDescription" name="problem_description" class="form-control" rows="4" required></textarea>
+            </div>
+            
+            <div class="form-group">
+                <label for="urgency">Urgency Level</label>
+                <select id="urgency" name="urgency" class="form-control" required>
+                    <option value="low">Low</option>
+                    <option value="medium">Medium</option>
+                    <option value="high">High</option>
+                    <option value="critical">Critical</option>
+                </select>
+            </div>
+            
+            <button type="submit" class="action-btn btn-primary">
+                <i class="fas fa-paper-plane"></i> Submit Request
+            </button>
+        </form>
+    </div>
+</div>
+
+<!-- Clearance/Return Modal -->
+<div id="returnModal" class="modal" style="display: none;">
+    <div class="modal-content">
+        <span class="close-modal">&times;</span>
+        <h3>Initiate Return for <span id="returnAssetName"></span></h3>
+        <form id="returnForm">
+            <input type="hidden" id="returnAssetId" name="asset_id">
+            
+            <div class="form-group">
+                <label for="returnReason">Return Reason</label>
+                <select id="returnReason" name="return_reason" class="form-control" required>
+                    <option value="transfer">Transfer to Another Custodian</option>
+                    <option value="repair">Needs Repair</option>
+                    <option value="disposal">Asset Disposal</option>
+                    <option value="other">Other</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="returnNotes">Additional Notes</label>
+                <textarea id="returnNotes" name="return_notes" class="form-control" rows="4"></textarea>
+            </div>
+            
+            <div class="form-group">
+                <label for="returnDate">Expected Return Date</label>
+                <input type="date" id="returnDate" name="return_date" class="form-control" required>
+            </div>
+            
+            <button type="submit" class="action-btn btn-primary">
+                <i class="fas fa-check-circle"></i> Submit Return Request
+            </button>
+        </form>
+    </div>
+</div>
+
 
     <script>
         // Search and Filter Functionality
@@ -633,6 +809,85 @@
                 }, index * 100);
             });
         });
+        // Modal functionality
+    const maintenanceModal = document.getElementById('maintenanceModal');
+    const returnModal = document.getElementById('returnModal');
+    const closeModalButtons = document.querySelectorAll('.close-modal');
+    
+    // Maintenance Request
+    document.querySelectorAll('.maintenance-btn').forEach(button => {
+        button.addEventListener('click', function() {
+            const assetId = this.getAttribute('data-asset-id');
+            const assetName = this.getAttribute('data-asset-name');
+            
+            document.getElementById('assetId').value = assetId;
+            document.getElementById('modalAssetName').textContent = assetName;
+            
+            maintenanceModal.style.display = 'block';
+        });
+    });
+    
+    // Return/Clearance Request
+    document.querySelectorAll('.return-btn').forEach(button => {
+        button.addEventListener('click', function() {
+            const assetId = this.getAttribute('data-asset-id');
+            const assetName = this.getAttribute('data-asset-name');
+            
+            document.getElementById('returnAssetId').value = assetId;
+            document.getElementById('returnAssetName').textContent = assetName;
+            
+            // Set default return date to today + 7 days
+            const today = new Date();
+            today.setDate(today.getDate() + 7);
+            const nextWeek = today.toISOString().split('T')[0];
+            document.getElementById('returnDate').value = nextWeek;
+            
+            returnModal.style.display = 'block';
+        });
+    });
+    
+    // Close modals
+    closeModalButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            maintenanceModal.style.display = 'none';
+            returnModal.style.display = 'none';
+        });
+    });
+    
+    // Close when clicking outside modal
+    window.addEventListener('click', function(event) {
+        if (event.target === maintenanceModal) {
+            maintenanceModal.style.display = 'none';
+        }
+        if (event.target === returnModal) {
+            returnModal.style.display = 'none';
+        }
+    });
+    
+    // Form submissions
+    document.getElementById('maintenanceForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        // Here you would typically send the form data to your backend
+        const formData = new FormData(this);
+        console.log('Maintenance Request:', Object.fromEntries(formData));
+        
+        // Show success message
+        alert('Maintenance request submitted successfully!');
+        maintenanceModal.style.display = 'none';
+        this.reset();
+    });
+    
+    document.getElementById('returnForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        // Here you would typically send the form data to your backend
+        const formData = new FormData(this);
+        console.log('Return Request:', Object.fromEntries(formData));
+        
+        // Show success message
+        alert('Return request submitted successfully!');
+        returnModal.style.display = 'none';
+        this.reset();
+    });
     </script>
 </body>
 </html>
