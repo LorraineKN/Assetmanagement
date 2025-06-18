@@ -69,14 +69,16 @@ WSGI_APPLICATION = "assetmanagement.wsgi.application"
 
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
-
 DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': os.getenv('DB_NAME', 'railway'),
+        'USER': os.getenv('DB_USER', 'postgres'),
+        'PASSWORD': os.getenv('DB_PASSWORD', 'CMgvveUcxKnApsLGyeXpftIEqIvOYLky'),
+        'HOST': os.getenv('DB_HOST', 'gondola.proxy.rlwy.net'),
+        'PORT': os.getenv('DB_PORT', '10285'),
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
@@ -113,7 +115,7 @@ AUTH_USER_MODEL = "users.User"
 
 LOGIN_URL = "login"
 LOGIN_REDIRECT_URL = "profile"
-LOGOUT_REDIRECT_URL = "signin"
+LOGOUT_REDIRECT_URL = "/admin/login/"
 
 
 # BASE_URL = "https://assetmanagement-production-9585.up.railway.app"
@@ -164,3 +166,8 @@ CORS_ALLOWED_ORIGINS = [
     "https://assetmanagement-production-9585.up.railway.app",
     "https://*.railway.app",
 ]
+
+
+
+
+
