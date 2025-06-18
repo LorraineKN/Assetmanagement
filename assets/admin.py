@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.db.models import Sum
 from django.utils.html import format_html
 
-from .models import (Asset, AssetTransfer, AuditLog, Category, Custodian,
+from .models import (Asset, AssetTransfer, Category, Custodian,
                      Department, DepreciationRecord, FinancialTransaction,
                      Location, MaintenanceRecord, Tag, Vendor)
 
@@ -258,33 +258,33 @@ class DepreciationRecordAdmin(BaseAdmin):
     autocomplete_fields = ["asset"]
 
 
-@admin.register(AuditLog)
-class AuditLogAdmin(admin.ModelAdmin):
-    list_display = (
-        "timestamp",
-        "user",
-        "action",
-        "model_name",
-        "object_id",
-        "ip_address",
-    )
-    list_filter = ("action", "model_name", "timestamp", "user")
-    search_fields = ("user__username", "model_name", "object_id", "details")
-    readonly_fields = (
-        "timestamp",
-        "user",
-        "action",
-        "model_name",
-        "object_id",
-        "details",
-        "ip_address",
-    )
+# @admin.register(AuditLog)
+# class AuditLogAdmin(admin.ModelAdmin):
+#     list_display = (
+#         "timestamp",
+#         "user",
+#         "action",
+#         "model_name",
+#         "object_id",
+#         "ip_address",
+#     )
+#     list_filter = ("action", "model_name", "timestamp", "user")
+#     search_fields = ("user__username", "model_name", "object_id", "details")
+#     readonly_fields = (
+#         "timestamp",
+#         "user",
+#         "action",
+#         "model_name",
+#         "object_id",
+#         "details",
+#         "ip_address",
+#     )
 
-    def has_add_permission(self, request):
-        return False
+#     def has_add_permission(self, request):
+#         return False
 
-    def has_change_permission(self, request, obj=None):
-        return False
+#     def has_change_permission(self, request, obj=None):
+#         return False
 
 
 @admin.register(FinancialTransaction)
@@ -337,7 +337,7 @@ class AssetManagementAdminSite(admin.AdminSite):
                         "total_value": total_value,
                         "pending_maintenance": pending_maintenance,
                     }
-        except:
+        except Exception:
             # Gracefully handle any errors
             pass
 
