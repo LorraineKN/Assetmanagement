@@ -560,7 +560,7 @@
                 <!-- Inside the asset-card div, after the asset-details section and before the closing div -->
             <div class="asset-actions">
                 <!-- Maintenance Request Button -->
-                <button class="action-btn btn-primary maintenance-btn" 
+                <button id="trigger" class="action-btn btn-primary maintenance-btn" type="button"
                         data-asset-id="{{ asset.id }}"
                         data-asset-name="{{ asset.name }}">
                     <i class="fas fa-tools"></i> Request Maintenance
@@ -673,8 +673,14 @@
         <span class="close-modal">&times;</span>
         <h3>Request Maintenance for <span id="modalAssetName"></span></h3>
         <form id="maintenanceForm">
-            <input type="hidden" id="assetId" name="asset_id">
-            
+            {% csrf_token %}
+            <div>
+           <select id="assetId" name="asset_id" class="form-control" >
+                {% for asset in assets %}
+                    <option value="{{ asset.id }}">{{ asset.name }}</option>
+                {% endfor %}
+            </select> 
+            </div>
             <div class="form-group">
                 <label for="maintenanceType">Maintenance Type</label>
                 <select id="maintenanceType" name="maintenance_type" class="form-control" required>
@@ -688,17 +694,7 @@
                 <label for="problemDescription">Problem Description</label>
                 <textarea id="problemDescription" name="problem_description" class="form-control" rows="4" required></textarea>
             </div>
-            
-            <div class="form-group">
-                <label for="urgency">Urgency Level</label>
-                <select id="urgency" name="urgency" class="form-control" required>
-                    <option value="low">Low</option>
-                    <option value="medium">Medium</option>
-                    <option value="high">High</option>
-                    <option value="critical">Critical</option>
-                </select>
-            </div>
-            
+                   
             <button type="submit" class="action-btn btn-primary">
                 <i class="fas fa-paper-plane"></i> Submit Request
             </button>
@@ -743,6 +739,23 @@
 
 
     <script>
+
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let cookie of cookies) {
+                    cookie = cookie.trim();
+                    // Does this cookie string begin with the name we want?
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+
         // Search and Filter Functionality
         const searchInput = document.getElementById('searchInput');
         const statusFilter = document.getElementById('statusFilter');
@@ -813,8 +826,20 @@
     const maintenanceModal = document.getElementById('maintenanceModal');
     const returnModal = document.getElementById('returnModal');
     const closeModalButtons = document.querySelectorAll('.close-modal');
+    const triggerButton = document.getElementById('trigger');
+    
+    triggerButton.addEventListener('click', function() {
+        const assetId = this.getAttribute('data-asset-id');
+        const assetName = this.getAttribute('data-asset-name');
+        
+        document.getElementById('assetId').value = assetId;
+        document.getElementById('modalAssetName').textContent = assetName;
+        
+        maintenanceModal.style.display = 'block';
+    });
     
     // Maintenance Request
+    
     document.querySelectorAll('.maintenance-btn').forEach(button => {
         button.addEventListener('click', function() {
             const assetId = this.getAttribute('data-asset-id');
@@ -866,16 +891,33 @@
     
     // Form submissions
     document.getElementById('maintenanceForm').addEventListener('submit', function(e) {
-        e.preventDefault();
-        // Here you would typically send the form data to your backend
-        const formData = new FormData(this);
-        console.log('Maintenance Request:', Object.fromEntries(formData));
-        
-        // Show success message
-        alert('Maintenance request submitted successfully!');
-        maintenanceModal.style.display = 'none';
-        this.reset();
+    e.preventDefault();
+    const formData = new FormData(this);
+
+    fetch('/assets/create-maintenance-request/', {
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': getCookie('csrftoken')  
+        },
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.status === 'success') {
+            alert(data.message);
+            maintenanceModal.style.display = 'none';
+            this.reset();
+        } else {
+            alert('Error: ' + JSON.stringify(data.errors));
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('An unexpected error occurred.');
     });
+});
+
+
     
     document.getElementById('returnForm').addEventListener('submit', function(e) {
         e.preventDefault();

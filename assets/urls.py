@@ -7,6 +7,7 @@ from .views import (AssetCreateView, AssetDeleteView, AssetDetailView,
                     LocationListView, MaintenanceCreateView,
                     MaintenanceDeleteView, MaintenanceDetailView,
                     MaintenanceListView, MaintenanceUpdateView, VendorListView,
+                    create_maintenance_request,
                     custodian_dashboard,  custodian_profile)
 
 app_name = "assets"
@@ -78,5 +79,6 @@ urlpatterns = [
         name="custodian_list",
     ),
     path('profile/', login_required(custodian_profile), name='custodian_profile'),
+    path('create-maintenance-request/', create_maintenance_request, name='create_maintenance'),
     path('custodian-dashboard/', login_required(custodian_dashboard), name='custodian_dashboard'),
 ]

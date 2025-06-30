@@ -1,3 +1,4 @@
+from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
 from django.db.models import  Q, Sum
@@ -13,6 +14,33 @@ from users.models import User
 from .models import (Asset, AuditLog, Category, Custodian, Department,
                      Location, MaintenanceRecord, Vendor)
 
+from .forms import MaintenanceRequestForm
+
+@csrf_exempt
+def create_maintenance_request(request):
+    if request.method == 'POST':
+        form = MaintenanceRequestForm(request.POST)
+        if form.is_valid():
+            maintenance_record = form.save(commit=False)
+            maintenance_record.status = 'scheduled'
+            maintenance_record.schedule_date = timezone.now().date()
+            maintenance_record.save()
+
+            asset = maintenance_record.asset
+            asset.status = 'maintenance'
+            asset.save()
+            
+            return JsonResponse({
+                'status': 'success',
+                'message': 'Maintenance request created successfully'
+            })
+        else:
+            return JsonResponse({
+                'status': 'error',
+                'errors': form.errors
+            }, status=400)
+    
+    return JsonResponse({'error': 'Invalid request method'}, status=405)
 
 class DashboardView(TemplateView):
     """
@@ -648,10 +676,9 @@ def custodian_profile(request):
     except Custodian.DoesNotExist:
         return render(request, 'assets/not_custodian.html')
     
-    # Get recent activity
-    recent_assets = Asset.objects.filter(custodian=custodian).order_by('-updated_at')[:5]
-    
     context = {
         'custodian': custodian,
-        'recent_assets': recent_assets,
     }
+    return render(request, 'assets/custodian_profile.html', context)
+
+    
