@@ -3,6 +3,7 @@ black==25.1.0
 click==8.2.0
 Django==5.1.6
 django-cors-headers==4.7.0
+django-simpleui==2025.6.24
 isort==6.0.1
 mypy_extensions==1.1.0
 packaging==25.0
